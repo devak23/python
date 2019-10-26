@@ -2,6 +2,11 @@ from urllib.request import urlopen
 
 
 def fetch_words(url):
+    """
+    Fetches a list of words from a given URL
+    :param url: The URL containing the utf-8 document
+    :return: a list of words contained in the document
+    """
     with urlopen(url) as story:
         story_words = []
         for line in story:
@@ -13,11 +18,21 @@ def fetch_words(url):
 
 
 def print_items(items):
+    """
+    Prints the items that are passed
+    :param items: printable items
+    :return: None
+    """
     for item in items:
         print(item)
 
 
 def main(url):
+    """
+    Invokes the main from the command line
+    :param url: url of the document passed via sys.args
+    :return: None
+    """
     words = fetch_words(url)
     print_items(words)
 

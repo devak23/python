@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from urllib.request import urlopen
 
 
@@ -20,8 +21,7 @@ def fetch_words(url):
 def print_items(items):
     """
     Prints the items that are passed
-    :param items: printable items
-    :return: None
+    :param items: iterable series of printable items
     """
     for item in items:
         print(item)
@@ -29,9 +29,8 @@ def print_items(items):
 
 def main(url):
     """
-    Invokes the main from the command line
-    :param url: url of the document passed via sys.args
-    :return: None
+    Prints each word from a document pointed by the URL
+    :param url: url of the utf-8 document
     """
     words = fetch_words(url)
     print_items(words)

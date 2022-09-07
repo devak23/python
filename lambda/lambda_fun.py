@@ -1,6 +1,6 @@
 # lambda returns a function object.
 
-### Example 1
+# Example 1
 
 str1 = 'Mary had a little lamb'
 str2 = 'One a penny, two a penny. Hot cross buns'
@@ -21,7 +21,7 @@ print("Int Formatting: ", format_numeric(5000))
 print("Float Formatting: ", format_numeric(888888.97234613))
 
 
-## Example 3: difference between lambda functions and def
+# Example 3: difference between lambda functions and def
 
 def cube(y):
     return y * y * y
@@ -32,8 +32,8 @@ lambda_cube = lambda y: y * y * y
 print("Invoking def: ", cube(3))
 print("Invoking lambda: ", lambda_cube(3))
 
-### Example 4: Correct usage of lambda.
-## Assigning lambdas to names basically just duplicates the functionality of def - and in general, it's best to do
+# Example 4: Correct usage of lambda.
+# Assigning lambdas to names basically just duplicates the functionality of def - and in general, it's best to do
 # something a single way to avoid confusion and increase clarity. The legitimate use case for lambda is where you want
 # to use a function without assigning it, e.g:
 
@@ -49,7 +49,7 @@ print(sorted_by_name)
 sorted_by_age = sorted(friends, key=lambda f: f.age)
 print(sorted_by_age)
 
-### Example 5: sorting timestamps
+# Example 5: sorting timestamps
 
 timestamps = [
     "2022-04-20 10:07:30",
@@ -71,7 +71,15 @@ print(timestamps)
 sorted_ts = sorted(timestamps, reverse=True)
 print(sorted_ts)
 
-### Example 6 - Lambda with if else
+# Example 6 - Lambda with if else
 max_num = lambda a, b: a if (a > b) else b
 
-print(max_num(4,8))
+print(max_num(4, 8))
+
+# Example 7
+hello = lambda first, last: print ("Hello", first, last)
+bye = lambda first, last: print ("Bye", first, last)
+hi = lambda first, last: print ("Hi", first, last)
+do_it = lambda f, *args: f(*args)
+
+_ = list(map(do_it, [hello, bye, hi], ['Guru', 'Avinash', 'Abhay'], ['Subramanian', 'Thm', 'Kulkarni']))

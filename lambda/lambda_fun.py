@@ -14,7 +14,7 @@ rev_lower = lambda str: str.lower()[::-1]
 print(rev_upper(str1))
 print(rev_lower(str2))
 
-## Example 2: We can use lambda functions in conditional checks like so...
+# Example 2: We can use lambda functions in conditional checks like so...
 
 format_numeric = lambda num: f"{num:e}" if isinstance(num, int) else f"{num:.2f}"
 print("Int Formatting: ", format_numeric(5000))
@@ -77,9 +77,9 @@ max_num = lambda a, b: a if (a > b) else b
 print(max_num(4, 8))
 
 # Example 7
-hello = lambda first, last: print ("Hello", first, last)
-bye = lambda first, last: print ("Bye", first, last)
-hi = lambda first, last: print ("Hi", first, last)
+hello = lambda first, last: print("Hello", first, last)
+bye = lambda first, last: print("Bye", first, last)
+hi = lambda first, last: print("Hi", first, last)
 do_it = lambda f, *args: f(*args)
 
 _ = list(map(do_it, [hello, bye, hi], ['Guru', 'Avinash', 'Abhay'], ['Subramanian', 'Thm', 'Kulkarni']))

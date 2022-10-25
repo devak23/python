@@ -2,6 +2,9 @@ import time
 
 
 class Counter:
+    """
+    Sometimes you need a way to start and stop a thread. A simple flag 'running' can be quite handy.
+    """
     def __init__(self) -> None:
         self._running = True
 
@@ -9,6 +12,7 @@ class Counter:
         self._running = False
 
     def countdown(self, n) -> None:
+        # we check if the thread is running and the count still isn't zero before we do anything.
         while self._running and n > 0:
             print(f'T minus {n}')
             n -= 1

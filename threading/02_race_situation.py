@@ -1,4 +1,4 @@
-# lets consider a program that reads a website and writes the content to a file
+# let's consider a program that reads a website and writes the content to a file
 import io
 import threading
 from urllib.request import urlopen

@@ -1,12 +1,8 @@
-# Race conditions, like any other failures are pesky things designed to torture you in professional life alluding you
-# towards alcohol, smoking, drugs and the other vices. However, we don't have to go that far. Programming languages
-# offer simple constructs like synchronization so as prevent you from doing substance abuse. Ofcourse, I am preaching
-# to the choir here... so let's dive into code and see how python does these things in action.
-
-# For our simplistic toy example (and really, that's the limit of my technical super-strength here), we are going to
-# have 2 different..no... 3 different emitters A.K.A producers for the techies! :( emitting 3 different sentences and
-# 3 threads writing them into a same text file and like a sadist, we will watch them all getting jumbled up and laugh
-# out loud (like The Devil/Satan/Iblis/Yamraaj/Lucifer ... ooh! that's cool series on Netflix! Have you seen it?)
+# Yawn Yawn! Ofcourse you could see this coming. I mean, it doesn't need a Sherlock Holmes to figure out what will happen
+# when all the threads write into the same file. Ofcourse! But now how do we solve it? ... "Elementary, my dear Watson!"
+# LOCKS!!!
+# I know it's not as flashy as it sounds, but remember, we are just speaking a different language here (no pun intended)
+# The concept will still remain the same only the syntax changes. So here we go again...
 
 from collections import namedtuple
 from queue import Queue
@@ -17,36 +13,47 @@ HolyBook = namedtuple('HolyBook', ['name', 'quote'])
 
 
 class Preacher:
-    def __init__(self, name: str, quotes: Queue, lock: Lock):
-        self._quotes = quotes
+    def __init__(self, name: str, book: HolyBook, lock: Lock):
+        """
+        The curtain rises! Now the Preacher is given a "Lock" object from the 'threading package'. This lock object
+        will allow him/her to preach only if he/she can acquire it in the first place.
+        """
+        self.__quotes = Queue()  # Also did you note now other variables apart from the quotes are protected and this one private?
         self._name = name
-        self.__can_preach = True
-        self.__lock = lock
+        self._book = book
+        self._can_preach = True
+        self._lock = lock
 
     def preach(self, masses: str):
         try:
-            self.__lock.acquire()
-            while self.__can_preach and self._quotes.qsize():
+            # The preacher will first try to acquire the lock. If that is successful, preaching follows...
+            self._lock.acquire()
+            while self._can_preach and self.__quotes.qsize():
                 with open(file=masses, mode='a') as f:
-                    f.write(self._quotes.get() + "\r\n")
-            self.__lock.release()
+                    f.write(self.__quotes.get() + "\r\n")
+            # After all is done, the lock is released and the other preacher can get it.
+            self._lock.release()
         except IOError:
             print("No masses found! Cannot preach")
         print(f'{self._name}: Done preaching!')
 
     def stop_preaching(self):
-        self.__can_preach = False
+        self._can_preach = False
+
+    def prepare_for_sermon(self) -> None:
+        while self.__quotes.qsize() < 100:
+            self.__quotes.put(self._book.quote)
+        print(f"Quotes populated from {self._book.name}")
 
 
 def populate_queue(queue: Queue, book: HolyBook) -> None:
-    # since we don't have a large repo of quotes, we are going to just populate the same quote in the queue
     while queue.qsize() < 50:
         queue.put(book.quote)
     print(f"populated queue from {book.name}")
 
 
-if __name__ == '__main__':
-    # Let's create an instance of Holy books.
+def main() -> None:
+    # as before, we create the Holy Books
     Bible = HolyBook('Bible',
                      '[Corinthians 11:14] - And no wonder, for Satan himself masquerades as an angel of light.')
     Quran = HolyBook('Quran',
@@ -55,46 +62,37 @@ if __name__ == '__main__':
                     '[Gita 16:4] - Arrogance, pride, anger, conceit, harshness and ignorance-these qualities belong to those of demonic nature, O Partha.')
     print("Created the holy books.")
 
-    # and let's create 3 different queues which will receive quotes from these holy books. YES! this time we are using
-    # the actual queue instead of a list.
-    quotes_from_gita = Queue()
-    quotes_from_bible = Queue()
-    quotes_from_quran = Queue()
-    print("Created the queues.")
-
-    # and populate these queues from the respective holy books
-    tq = Thread(target=populate_queue, args=(quotes_from_quran, Quran))
-    tg = Thread(target=populate_queue, args=(quotes_from_gita, Gita))
-    tb = Thread(target=populate_queue, args=(quotes_from_bible, Bible))
-    print("...started populating the queues from the holy books.")
-
-    tq.start()
-    tb.start()
-    tg.start()
-
-    # Now we have the producers going, lets create consumers
+    # and we create an instance of a Lock object. Very important!!
     lock = Lock()
-    padre = Preacher('Father', quotes_from_bible, lock)
-    guru = Preacher('Guru', quotes_from_gita, lock)
-    maulvi = Preacher('Maulvi', quotes_from_quran, lock)
+
+    # We will give each preacher the book containing the quotes and the lock which they can hold. The first one to hit
+    # the buzzer gets to deliver his/her sermon!
+    padre = Preacher('Father', Bible, lock)
+    guru = Preacher('Guru', Gita, lock)
+    maulvi = Preacher('Maulvi', Quran, lock)
     print("Preachers created.")
 
-    # These 3 distinguished folks are now going to preach the masses, so let's have them going
+    # and we will ask the preachers to prepare for the sermon i.e.populate queues from the respective holy books
+    maulvi.prepare_for_sermon()
+    guru.prepare_for_sermon()
+    padre.prepare_for_sermon()
+
+    # Again, we create 3 threads to get the preaching going...The audience is again common
     tmaulvi = Thread(target=maulvi.preach, args=("masses.txt",))
     tguru = Thread(target=guru.preach, args=("masses.txt",))
     tpadre = Thread(target=padre.preach, args=("masses.txt",))
     print("Created threads for the preachers...")
 
-    # Notice how we have the same audience for all the 3 religious speaker and that's where the race will be seen
     tmaulvi.start()
     tguru.start()
     tpadre.start()
     print("Preachers have started preaching...")
 
-    # We now wait for 10 seconds and then ask each of them to stop preaching
-    print("Waiting for 10 seconds for the preachers to preach the masses...")
-    time.sleep(10)
+    # We now wait for 5 seconds and then ask each of them to stop preaching
+    print("Waiting for 5 seconds for the preachers to preach the masses...")
+    time.sleep(5)
 
+    # and we ask them to stop preaching
     guru.stop_preaching()
     padre.stop_preaching()
     maulvi.stop_preaching()
@@ -105,5 +103,9 @@ if __name__ == '__main__':
     tguru.join()
     tmaulvi.join()
 
-    # and we are done!
+    # now take a look, and you should see all the preachers have gotten to all their quotes in their time slice
     print('Done!')
+
+
+if __name__ == '__main__':
+    main()

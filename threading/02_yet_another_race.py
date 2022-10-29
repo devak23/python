@@ -1,11 +1,11 @@
 # Race conditions, like any other failures are pesky things designed to torture you in professional life alluding you
 # towards alcohol, smoking, drugs and the other vices. However, we don't have to go that far. Programming languages
-# offer simple constructs like synchronization so as prevent you from doing substance abuse. Ofcourse, I am preaching
-# to the choir here... so let's dive into code and see how python does these things in action.
+# offer simple constructs like synchronization to prevent you from doing substance abuse. Ofcourse, I am preaching
+# to the choir ... so let's dive into code and see how python does these things in action.
 
 # For our simplistic toy example (and really, that's the limit of my technical super-strength here), we are going to
-# have 2 different..no... 3 different emitters A.K.A producers for the techies! :( emitting 3 different sentences and
-# 3 threads writing them into a same text file and like a sadist, we will watch them all getting jumbled up and laugh
+# have 2 different..no... 3 different emitters A.K.A producers for the techies! :( emitting 3 different quotes and
+# 3 consumers writing them into a text file. Like a sadist, we will watch them all getting jumbled up and laugh
 # out loud (like The Devil/Satan/Iblis/Yamraaj/Lucifer ... ooh! that's cool series on Netflix! Have you seen it?)
 
 from collections import namedtuple
@@ -13,37 +13,56 @@ from queue import Queue
 from threading import Thread
 import time
 
+# So we define a value holder class called as the HolyBook. You must be a pro by now to understand and use this snippet.
 HolyBook = namedtuple('HolyBook', ['name', 'quote'])
 
 
 class Preacher:
-    def __init__(self, name: str, quotes: Queue):
-        self._quotes = quotes
+    """
+    Now we define a Preacher whose job is to read a quote from his book and preach the meaning to the masses. So we will
+    have him/her have a "queue" of quotes with a name (like 'Padre', 'Maulvi' or 'Guru') who can expand on the ideas of
+    those quotes. Finally, we also need a 'flag' which can instruct him/her if he can preach or not.
+    """
+
+    def __init__(self, name: str, book: HolyBook):
+        self.__quotes = Queue()  # YES! this time we are using the actual queue instead of using my own creation :P
         self._name = name
-        self.__can_preach = True
+        self._book = book
+        self._can_preach = True
 
     def preach(self, masses: str):
+        """
+        This is the behavior where the preacher will "write" the quote it gets from the queue into a file
+        """
+
+        # BTW... this is how you do a try-catch in python... Quite easy and pretty much same as Java!
         try:
-            while self.__can_preach and self._quotes.qsize():
+            # So we are saying while the preacher is allowed to preach and if the quotes are available,
+            while self._can_preach and self.__quotes.qsize():
+                # we will open a file in an "append" mode and ...
                 with open(file=masses, mode='a') as f:
-                    f.write(self._quotes.get() + "\r\n")
+                    # we keep on writing into the file.
+                    f.write(self.__quotes.get() + "\r\n")
         except IOError:
             print("Couldn't preach!")
+        # After the preacher is done we delcare so. No brilliance here if you were expecting one :)
         print(f'{self._name}: Done preaching!')
 
     def stop_preaching(self):
-        self.__can_preach = False
+        """
+        And this method will signal the preacher that he/she may stop preaching now.
+        """
+        self._can_preach = False
+
+    def prepare_for_sermon(self) -> None:
+        # since I absolutely lack creativity, I am gonna just populate the same quote over and over till you guys fall asleep.
+        while self.__quotes.qsize() < 100:
+            self.__quotes.put(self._book.quote)
+        print(f"Quotes populated from {self._book.name}")
 
 
-def populate_queue(queue: Queue, book: HolyBook) -> None:
-    # since we don't have a large repo of quotes, we are going to just populate the same quote in the queue
-    while queue.qsize() < 100:
-        queue.put(book.quote)
-    print(f"populated queue from {book.name}")
-
-
-if __name__ == '__main__':
-    # Let's create an instance of Holy books.
+def main() -> None:
+    # Let's create an instance of the Holy books.
     Bible = HolyBook('Bible',
                      '[Corinthians 11:14] - And no wonder, for Satan himself masquerades as an angel of light.')
     Quran = HolyBook('Quran',
@@ -52,45 +71,34 @@ if __name__ == '__main__':
                     '[Gita 16:4] - Arrogance, pride, anger, conceit, harshness and ignorance-these qualities belong to those of demonic nature, O Partha.')
     print("Created the holy books.")
 
-    # and let's create 3 different queues which will receive quotes from these holy books. YES! this time we are using
-    # the actual queue instead of a list.
-    quotes_from_gita = Queue()
-    quotes_from_bible = Queue()
-    quotes_from_quran = Queue()
-    print("Created the queues.")
-
-    # and populate these queues from the respective holy books
-    tq = Thread(target=populate_queue, args=(quotes_from_quran, Quran))
-    tg = Thread(target=populate_queue, args=(quotes_from_gita, Gita))
-    tb = Thread(target=populate_queue, args=(quotes_from_bible, Bible))
-    print("...started populating the queues from the holy books.")
-
-    tq.start()
-    tb.start()
-    tg.start()
-
-    # Now we have the producers going, lets create consumers
-    padre = Preacher('Father', quotes_from_bible)
-    guru = Preacher('Guru', quotes_from_gita)
-    maulvi = Preacher('Maulvi', quotes_from_quran)
+    # We will give each preacher the books containing the quotes
+    padre = Preacher('Father', Bible)
+    guru = Preacher('Guru', Gita)
+    maulvi = Preacher('Maulvi', Quran)
     print("Preachers created.")
 
-    # These 3 distinguished folks are now going to preach the masses, so let's have them going
+    # and we will ask the preachers to prepare for the sermon i.e.populate queues from the respective holy books
+    maulvi.prepare_for_sermon()
+    guru.prepare_for_sermon()
+    padre.prepare_for_sermon()
+
+    # These 3 distinguished folks are now going to preach the masses, so let's have them going in a thread.
     tmaulvi = Thread(target=maulvi.preach, args=("masses.txt",))
     tguru = Thread(target=guru.preach, args=("masses.txt",))
     tpadre = Thread(target=padre.preach, args=("masses.txt",))
     print("Created threads for the preachers...")
 
-    # Notice how we have the same audience for all the 3 religious speaker and that's where the race will be seen
+    # Notice how we have the same audience for all the 3 religious speakers and that's where the race will be seen
     tmaulvi.start()
     tguru.start()
     tpadre.start()
     print("Preachers have started preaching...")
 
-    # We now wait for 10 seconds and then ask each of them to stop preaching
-    print("Waiting for 10 seconds for the preachers to preach the masses...")
-    time.sleep(10)
+    # We will wait for 5 seconds and then ask each of them to stop preaching
+    print("Waiting for 5 seconds for the preachers to preach the masses...")
+    time.sleep(5)
 
+    # This ofcourse breaks the loop by setting the 'flag' to false.
     guru.stop_preaching()
     padre.stop_preaching()
     maulvi.stop_preaching()
@@ -101,5 +109,9 @@ if __name__ == '__main__':
     tguru.join()
     tmaulvi.join()
 
-    # and we are done!
+    # and we are done! Now take a look inside the masses.txt and you should expect all the quotes jumbled up.
     print('Done!')
+
+
+if __name__ == '__main__':
+    main()

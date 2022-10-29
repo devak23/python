@@ -7,6 +7,9 @@
 # have 2 different..no... 3 different emitters A.K.A producers for the techies! :( emitting 3 different quotes and
 # 3 consumers writing them into a text file. Like a sadist, we will watch them all getting jumbled up and laugh
 # out loud (like The Devil/Satan/Iblis/Yamraaj/Lucifer ... ooh! that's cool series on Netflix! Have you seen it?)
+# And about that laughter, really?? Why does the evil have to laugh out loud? I don't get it. You designed it that way
+# and it worked... so? what's the big story here? I mean programmers do this all the damn time! You don't see me
+# laughing after this program working the way I wanted it work, do you? Such a cliché I tell you!
 
 from collections import namedtuple
 from queue import Queue
@@ -14,16 +17,16 @@ from threading import Thread
 import time
 
 # So we define a value holder class called as the HolyBook. You must be a pro by now to understand and use this snippet.
+# For those who were dozing, it creates a class on the fly with two attributes - name and quote in it.
 HolyBook = namedtuple('HolyBook', ['name', 'quote'])
 
 
 class Preacher:
     """
-    Now we define a Preacher whose job is to read a quote from his book and preach the meaning to the masses. So we will
-    have him/her have a "queue" of quotes with a name (like 'Padre', 'Maulvi' or 'Guru') who can expand on the ideas of
-    those quotes. Finally, we also need a 'flag' which can instruct him/her if he can preach or not.
+    And we define a Preacher whose job is to read a quote from his book and preach the meaning to the masses. So we will
+    have him/her have a name (like 'Padre', 'Maulvi' or 'Guru') and a "queue" of quotes with who can expand on the
+    ideas of quotes. Finally, we also need a 'flag' which can instruct him/her if he can preach or not.
     """
-
     def __init__(self, name: str, book: HolyBook):
         self.__quotes = Queue()  # YES! this time we are using the actual queue instead of using my own creation :P
         self._name = name
@@ -32,7 +35,8 @@ class Preacher:
 
     def preach(self, masses: str):
         """
-        This is the behavior where the preacher will "write" the quote it gets from the queue into a file
+        This is the behavior where the preacher will "preach" (write) the quote it gets from the queue into a file called
+        masses.txt
         """
 
         # BTW... this is how you do a try-catch in python... Quite easy and pretty much same as Java!
@@ -72,7 +76,7 @@ def main() -> None:
     print("Created the holy books.")
 
     # We will give each preacher the books containing the quotes
-    padre = Preacher('Father', Bible)
+    father = Preacher('Father', Bible)
     guru = Preacher('Guru', Gita)
     maulvi = Preacher('Maulvi', Quran)
     print("Preachers created.")
@@ -80,18 +84,19 @@ def main() -> None:
     # and we will ask the preachers to prepare for the sermon i.e.populate queues from the respective holy books
     maulvi.prepare_for_sermon()
     guru.prepare_for_sermon()
-    padre.prepare_for_sermon()
+    father.prepare_for_sermon()
 
-    # These 3 distinguished folks are now going to preach the masses, so let's have them going in a thread.
+    # These 3 distinguished folks are now going to "preach the masses" (the audience is masses.txt), so let's have them
+    # going in a thread.
     tmaulvi = Thread(target=maulvi.preach, args=("masses.txt",))
     tguru = Thread(target=guru.preach, args=("masses.txt",))
-    tpadre = Thread(target=padre.preach, args=("masses.txt",))
+    tfather = Thread(target=father.preach, args=("masses.txt",))
     print("Created threads for the preachers...")
 
     # Notice how we have the same audience for all the 3 religious speakers and that's where the race will be seen
     tmaulvi.start()
     tguru.start()
-    tpadre.start()
+    tfather.start()
     print("Preachers have started preaching...")
 
     # We will wait for 5 seconds and then ask each of them to stop preaching
@@ -100,12 +105,12 @@ def main() -> None:
 
     # This ofcourse breaks the loop by setting the 'flag' to false.
     guru.stop_preaching()
-    padre.stop_preaching()
+    father.stop_preaching()
     maulvi.stop_preaching()
     print("Preachers have been asked to stop preaching.")
 
     print("Waiting for threads to complete...")
-    tpadre.join()
+    tfather.join()
     tguru.join()
     tmaulvi.join()
 

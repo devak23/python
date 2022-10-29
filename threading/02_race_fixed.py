@@ -18,7 +18,7 @@ class Preacher:
         The curtain rises! Now the Preacher is given a "Lock" object from the 'threading package'. This lock object
         will allow him/her to preach only if he/she can acquire it in the first place.
         """
-        self.__quotes = Queue()  # Also did you note now other variables apart from the quotes are protected and this one private?
+        self.__quotes = Queue()  # Did you notice how the other variables are protected and this one being private?
         self._name = name
         self._book = book
         self._can_preach = True
@@ -67,7 +67,7 @@ def main() -> None:
 
     # We will give each preacher the book containing the quotes and the lock which they can hold. The first one to hit
     # the buzzer gets to deliver his/her sermon!
-    padre = Preacher('Father', Bible, lock)
+    father = Preacher('Father', Bible, lock)
     guru = Preacher('Guru', Gita, lock)
     maulvi = Preacher('Maulvi', Quran, lock)
     print("Preachers created.")
@@ -75,17 +75,17 @@ def main() -> None:
     # and we will ask the preachers to prepare for the sermon i.e.populate queues from the respective holy books
     maulvi.prepare_for_sermon()
     guru.prepare_for_sermon()
-    padre.prepare_for_sermon()
+    father.prepare_for_sermon()
 
-    # Again, we create 3 threads to get the preaching going...The audience is again common
+    # Again, we create 3 threads to get the preaching going...The audience is common for all the 3 preachers: masses.txt
     tmaulvi = Thread(target=maulvi.preach, args=("masses.txt",))
     tguru = Thread(target=guru.preach, args=("masses.txt",))
-    tpadre = Thread(target=padre.preach, args=("masses.txt",))
+    tfather = Thread(target=father.preach, args=("masses.txt",))
     print("Created threads for the preachers...")
 
     tmaulvi.start()
     tguru.start()
-    tpadre.start()
+    tfather.start()
     print("Preachers have started preaching...")
 
     # We now wait for 5 seconds and then ask each of them to stop preaching
@@ -94,12 +94,12 @@ def main() -> None:
 
     # and we ask them to stop preaching
     guru.stop_preaching()
-    padre.stop_preaching()
+    father.stop_preaching()
     maulvi.stop_preaching()
     print("Preachers have been asked to stop preaching.")
 
     print("Waiting for threads to complete...")
-    tpadre.join()
+    tfather.join()
     tguru.join()
     tmaulvi.join()
 

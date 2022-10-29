@@ -1,6 +1,10 @@
-# Yawn Yawn! Ofcourse you could see this coming. I mean, it doesn't need a Sherlock Holmes to figure out what will happen
-# when all the threads write into the same file. Ofcourse! But now how do we solve it? ... "Elementary, my dear Watson!"
-# LOCKS!!!
+# Fortunately, our masses did their homework pretty well and therefore even if the output is jumbled up, they can figure
+# out to themselves what the preacher was talking about. But not all audiences can decipher a mixed output.
+
+# Yawn,Yawn "I could see this from miles away. It doesn't need a Sherlock Holmes brain to figure out what will happen
+# when all the threads write into the same file" - You condescend me :( But you have learnt Java, so you know the trick.
+#
+# Ofcourse you are right! But now how do we solve it? ... "Elementary, my dear Watson!" -  LOCKS!!!
 # I know it's not as flashy as it sounds, but remember, we are just speaking a different language here (no pun intended)
 # The concept will still remain the same only the syntax changes. So here we go again...
 
@@ -57,16 +61,18 @@ def main() -> None:
     Bible = HolyBook('Bible',
                      '[Corinthians 11:14] - And no wonder, for Satan himself masquerades as an angel of light.')
     Quran = HolyBook('Quran',
-                     '[Quran 2:208] - O you who believe, you shall embrace total submission; do not follow the steps of Satan, for he is your most ardent enemy.')
+                     '[Quran 2:208] - O you who believe, you shall embrace total submission; do not follow the steps '
+                     'of Satan, for he is your most ardent enemy.')
     Gita = HolyBook('Gita',
-                    '[Gita 16:4] - Arrogance, pride, anger, conceit, harshness and ignorance-these qualities belong to those of demonic nature, O Partha.')
+                    '[Gita 16:4] - Arrogance, pride, anger, conceit, harshness and ignorance-these qualities belong '
+                    'to those of demonic nature, O Partha.')
     print("Created the holy books.")
 
     # and we create an instance of a Lock object. Very important!!
     lock = Lock()
 
     # We will give each preacher the book containing the quotes and the lock which they can hold. The first one to hit
-    # the buzzer gets to deliver his/her sermon!
+    # the buzzer gets to deliver his/her sermon! So they will have to play "fastest finger first"
     father = Preacher('Father', Bible, lock)
     guru = Preacher('Guru', Gita, lock)
     maulvi = Preacher('Maulvi', Quran, lock)
@@ -92,7 +98,6 @@ def main() -> None:
     print("Waiting for 5 seconds for the preachers to preach the masses...")
     time.sleep(5)
 
-    # and we ask them to stop preaching
     guru.stop_preaching()
     father.stop_preaching()
     maulvi.stop_preaching()
@@ -103,9 +108,14 @@ def main() -> None:
     tguru.join()
     tmaulvi.join()
 
-    # now take a look, and you should see all the preachers have gotten to all their quotes in their time slice
+    # now take a look, and you should see all the preachers have gotten to all their quotes in their time slice. The
+    # output file is much ordered now.
     print('Done!')
 
 
 if __name__ == '__main__':
     main()
+
+# so the audience now listened to each preacher and could understand what they said for that duration of time before
+# moving on to the next one. THAT! my dear friend is how we can do synchronization in python. There are more
+# synchronization elements and we will go over it one by one, but that's all for today. See you next Friday!

@@ -25,7 +25,7 @@
 # a very standard interview question should any of you attempt in the near future ;). So we know there are specific # of
 # slots in a parking lot. Any additional cars that come in will have to wait till somebody clears off their slot. That's
 # what we will attempt to build using semaphores. Let's see how.
-
+import time
 import uuid
 from concurrent.futures import ThreadPoolExecutor
 from threading import Semaphore
@@ -34,8 +34,8 @@ AVAILABLE_SLOTS = 5
 
 
 class Car:
-    def __init__(self, employee: str) -> None:
-        self.name = employee
+    def __init__(self, owner: str) -> None:
+        self.owner = owner
         self._parked = False
         self.token = None
 
@@ -57,9 +57,9 @@ class ParkingLot:
             self.__slots.acquire()
             car.assign_token(uuid.uuid4())
             self.__space.append(car)
-            return True, car.name, car.token
+            return True, car.owner, car.token
         else:
-            return False, car.name, None
+            return False, car.owner, None
 
     def unpark(self, token: str) -> Car | None:
         if len(self.__space) > 0:
@@ -80,8 +80,12 @@ def main() -> None:
             Car('Guru'), Car('Tejas'), Car('Purva'), Car('Chinmay'), Car('Mohita'), Car('Sana'),
             Car('Purva'), Car('Sahana')]
 
+    parked_tokens = []
+
     with ThreadPoolExecutor(max_workers=4) as executor:
         result = executor.map(parking_lot.park, cars)
+        parked_tokens = [r for r in result if r.]
+
 
     for r in result:
         print(r)

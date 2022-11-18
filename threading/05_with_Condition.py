@@ -22,49 +22,49 @@ from threading import Condition, Thread
 
 
 class Friend:
-    def __init__(self, name, phone_call: Condition) -> None:
+    def __init__(self, name, phone: Condition) -> None:
         """
         # We define a 'Friend' (Caller) class who has a name and a phone.
         """
         self.name = name
-        self.__phone = phone_call
+        self.phone = phone
 
     def call(self, callee: str) -> None:
         """
         The Friend can "call" another friend (callee). So think of this method from the caller's point of view here.
         Since this method doesn't do much, a None is returned
         """
-        self.__phone.acquire()  # we dial the friend's number.
+        self.phone.acquire()  # we dial the friend's number.
         # In technical terms we acquire a lock on the Condition variable.
         print(f'{self.name} calling {callee}')
 
-        self.__phone.wait()  # and we hold while it rings on the other end of the line.
+        self.phone.wait()  # and we hold while it rings on the other end of the line.
         # In short, the thread will be blocked here waiting for a 'notification' from the other end
 
         print(f'{self.name} is now talking to {callee}')
-        time.sleep(3)  # only to simulate a feel of conversation.
+        time.sleep(3)  # only to simulate a conversation.
         print(f'Conversation is over. {self.name} disconnected the call')
 
-        self.__phone.release()  # Once we are done, we disconnect the call.
+        self.phone.release()  # Once we are done, we disconnect the call.
         # In technical terms, we will release the hold on the condition variable.
 
     def receive(self, caller: str) -> None:
         """
-        Similarly, "this other Friend" can receive a phone call from the Caller. So think of this method from the
-        callee's point of view. Again since this method doesn't do much, a None is returned
+        Similar to the call behavior, this class can receive a phone call from the Caller. So think of this method from the
+        callee's point of view. Again, since this method doesn't do much, a None is returned
         """
         print(f'{self.name} receiving the call')
         time.sleep(1)  # only to simulate a delay of getting the call.
 
-        self.__phone.acquire()  # Callee grabs the phone aka: secures the lock on the condition variable.
+        self.phone.acquire()  # Callee grabs the phone aka: secures the lock on the condition variable.
         print(f'{self.name} picks up the receiver and greets')
-        self.__phone.notify()  # THIS, RIGHT HERE... IS VERY IMPORTANT! the notify() as mentioned in the introduction
+        self.phone.notify()  # THIS, RIGHT HERE... IS VERY IMPORTANT! the notify() as mentioned in the introduction
         # signals that the condition is satisfied between the two threads. The callee is now in sync with the caller
         # and two can communicate.
 
         print(f'{self.name} is now talking to {caller}')
         time.sleep(3) # only to simulate a conversation
-        self.__phone.release()  # again, when call is done, we release the hold on the condition variable which allows
+        self.phone.release()  # again, when call is done, we release the hold on the condition variable which allows
         # the thread to resume its job.
 
 

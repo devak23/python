@@ -12,7 +12,7 @@
 # else footing the bill :( ... Anyways, Dijkstra's famous "Shortest Path Algorithm" is well known in the field of
 # Computer Science. When I say "well known", I mean it is known to a lot of people, EXCEPT ME! But, depending on your
 # career aspirations or your desire to socialize with the "masters of the universe" within the company, you might choose
-# to know/study it. However, for the lesser mortals like me, as long as the "GPS lady" correctly guides you from
+# to know/study it. That said, for the lesser mortals like me, as long as the "GPS lady" correctly guides you from
 # Sodawala Lane (Borivali) to Zhaveri Baazar (Kalbadevi), you are sorted.
 #
 # I have digressed... as I usually do. So, coming back, semaphore is a fancy word for "flag". This flag is basically a
@@ -27,8 +27,7 @@
 # what we will attempt to build using semaphores. Let's see how.
 import time
 import uuid
-from concurrent.futures import ThreadPoolExecutor
-from threading import Semaphore
+from threading import Semaphore, Thread
 
 AVAILABLE_SLOTS = 5
 
@@ -36,59 +35,106 @@ AVAILABLE_SLOTS = 5
 class Car:
     def __init__(self, owner: str) -> None:
         self.owner = owner
-        self._parked = False
         self.token = None
 
     def assign_token(self, token):
         self.token = token
-        self._parked = True if token else False
 
     def is_parked(self):
-        return self._parked
+        return True if self.token else False
+
+    def __repr__(self):
+        return f"{self.owner}'s car"
 
 
 class ParkingLot:
     def __init__(self):
         self.__slots: Semaphore = Semaphore(AVAILABLE_SLOTS)
-        self.__space: list = []
+        self.__space: dict = {}
 
-    def park(self, car: Car) -> (bool, str, str):
-        if len(self.__space) < AVAILABLE_SLOTS:
-            self.__slots.acquire()
-            car.assign_token(uuid.uuid4())
-            self.__space.append(car)
-            return True, car.owner, car.token
-        else:
-            return False, car.owner, None
+    def assign_car(self, car: Car, token):
+        self.__slots.acquire()
+        self.__space[token] = car
+        return True
 
-    def unpark(self, token: str) -> Car | None:
-        if len(self.__space) > 0:
-            self.__slots.release()
-            slot = [s for s in self.__space if s.car.token == token]
-            car = slot[0]
-            car.assign_token(None)
-            return car
+    def release_car(self, token: str):
+        self.__slots.release()
+        car_dict = {t: c for (t, c) in self.__space.items() if t == token}
+
+        car_dict[token].assign_token(None)
+        return car_dict[token]
+
+    def has_empty_slots(self) -> bool:
+        return len(self.__space) < AVAILABLE_SLOTS
+
+    def is_slot_filled(self) -> bool:
+        return len(self.__space) > 0
+
+    def available_slots(self) -> int:
+        return len(self.__space)
+
+    def empty_slots(self) -> int:
+        return AVAILABLE_SLOTS - self.available_slots()
+
+
+class Vallet:
+    def __init__(self, parking_lot):
+        self.parking_lot = parking_lot
+        self._continue = True
+
+    def park(self, car: Car) -> (str, str):
+        if self.parking_lot.has_empty_slots():
+            token = uuid.uuid4()
+            car.assign_token(token)
+            self.parking_lot.assign_car(car, token)
+            return token, car.owner
         else:
-            return None
+            return None, car.owner
+
+    def unpark(self, token: str) -> Car:
+        if self.parking_lot.is_slot_filled():
+            return self.parking_lot.release_car(token)
+        else:
+            raise RuntimeError('No car is present in the slot')
+
+    def park_cars(self, unparked_cars: list, parked_cars: list):
+        while self._continue and len(unparked_cars) > 0:
+            for c in unparked_cars:
+                self.park(c)
+                parked_cars.append(c)
+                unparked_cars.remove(c)
+                time.sleep(1)
+                print(f"{c.owner}'s car is parked")
+
+    def unpark_cars(self, parked_cars: list):
+        while self._continue and len(parked_cars) > 0:
+            for c in parked_cars:
+                self.unpark(c.token)
+                time.sleep(5)
+                parked_cars.remove(c)
+                print(f"-----{c.owner}'s car is vacated")
 
 
 def main() -> None:
     parking_lot = ParkingLot()
 
-    cars = [Car('Suhas'), Car('KavitaK'), Car('KavitaY'), Car('Junaid'), Car('Saif'), Car('Avinash'),
+    cars = [Car('Suhas'), Car('Kavita K'), Car('Kavita Y'), Car('Junaid'), Car('Saif'), Car('Avinash'),
             Car('Dinesh'), Car('Nimisha'), Car('Abrar'), Car('Nitin'),
             Car('Guru'), Car('Tejas'), Car('Purva'), Car('Chinmay'), Car('Mohita'), Car('Sana'),
             Car('Purva'), Car('Sahana')]
 
-    parked_tokens = []
+    unparked_cars = [] + cars
+    parked_cars = []
 
-    with ThreadPoolExecutor(max_workers=4) as executor:
-        result = executor.map(parking_lot.park, cars)
-        parked_tokens = [r for r in result if r.]
+    vallet1 = Vallet(parking_lot)
+    vallet2 = Vallet(parking_lot)
 
+    tvallet1 = Thread(target=vallet1.park_cars, args=(unparked_cars, parked_cars))
+    tvallet2 = Thread(target=vallet2.unpark_cars, args=(unparked_cars, parked_cars,))
 
-    for r in result:
-        print(r)
+    tvallet1.start()
+    # time.sleep(10)
+    # tvallet2.start()
 
 
 if __name__ == '__main__':

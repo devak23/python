@@ -27,7 +27,7 @@
 # what we will attempt to build using semaphores. Let's see how.
 import time
 import uuid
-from threading import Semaphore, Thread
+from threading import Semaphore, Thread, BoundedSemaphore
 
 AVAILABLE_SLOTS = 5
 
@@ -49,7 +49,7 @@ class Car:
 
 class ParkingLot:
     def __init__(self):
-        self.__slots: Semaphore = Semaphore(AVAILABLE_SLOTS)
+        self.__slots: Semaphore = BoundedSemaphore(AVAILABLE_SLOTS)
         self.__space: dict = {}
 
     def assign_car(self, car: Car, token):

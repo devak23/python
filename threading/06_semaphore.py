@@ -30,11 +30,9 @@
 # standard interview question ;). So we know there are specific # of slots in a parking lot. Any additional cars
 # that come in will have to wait till somebody clears off their slot. That's what we will attempt to build using
 # semaphores. Let's get into it.
-import time
 import uuid
 from concurrent.futures import ThreadPoolExecutor
 from threading import Semaphore
-from uuid import UUID
 
 AVAILABLE_SLOTS = 5
 

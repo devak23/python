@@ -5,26 +5,25 @@
 # communication language for a foreseeable future all the languages of the world including mine really ought to
 # "normalize" the names that are easily pronounceable. I mean c'mmon... Edseger Dijkstra? As an Indian myself,
 # I pronounced his name as the syllables were introduced to me in kindergarten - "Ed-say-ger dee-juk-stra". I know I
-# inserted the 'u' there, but I couldn't really pronounce jk together without making an "u" sound. I know ... lame!
-# :( Anyways, my way of pronunciation of that name doesn't have a nice ring to it. So I googled :| It turns out,
-# the name is pronounced "ets-kar daa-eek-stra" with a very rounded D and T sounds (not sharp as in "dot" in english)
-# :| Now, why does there have to be a j in his first name? :| Well, only the "dutchman" knows, but the point is Mr.
-# Dijkstra being genius and all managed to get us into trouble by investing his time into algorithms. This is a
-# classic case of someone enjoying the cake and someone else footing the bill :( ... Anyways, Dijkstra's famous
-# "Shortest Path Algorithm" is well known in the field of Computer Science. When I say "well known", I mean it is
-# known to a lot many people, EXCEPT ME! :| Now, depending on your career aspirations or your desire to socialize
-# with the "tech gurus" within the company, you might choose to know/study it. For the rest of lesser mortals like
-# me, as long as the "GPS lady" correctly guides you from Sodawala Lane (Borivali) to Zhaveri Baazar (Kalbadevi),
-# you are sorted ;)
+# inserted the 'u' there, but I couldn't really pronounce jk together without making an "u" sound (u as in under). I
+# know ... lame! :( Anyways, my way of pronunciation of that name doesn't have a nice ring to it. So I googled :| It
+# turns out, the name is pronounced "ets-kar daa-eek-stra" with a very rounded D and T sounds (not sharp as in "dot"
+# in english) :| Now, why does there have to be a j in his first name? :| Well, only the "dutchman" knows,
+# but the point is Mr. Dijkstra being genius and all managed to get us into trouble by investing his time into
+# algorithms. This is a classic case of someone enjoying the cake and someone else footing the bill :( ... Anyways,
+# Dijkstra's famous "Shortest Path Algorithm" is well known in the field of Computer Science. When I say "well
+# known", I mean it is known to a lot many people, EXCEPT ME! :| Now, depending on your career aspirations or your
+# desire to socialize with the "tech gurus" within the company, you might choose to know/study it. For the rest of
+# lesser mortals like me, as long as the "GPS lady" correctly guides us from Sodawala Lane (Borivali) to Zhaveri
+# Baazar (Kalbadevi), we are sorted ;)
 #
 # I have digressed... as I usually do :|. So, coming back, semaphore is a fancy word for "flag". This flag is
 # basically a signal used for communicating with another thread. Ever seen railway folks wave a physical flag to an
 # incoming/ outgoing trains? THAT! my friend is a real life semaphore. In the software universe, a semaphore will
 # allow communication between specific # of threads and enable concurrency. You could achieve the same goal with
-# locks and a counter, but why re-invent the wheel when a Semaphore is handy? Typically, you initialize a Semaphore
-# by a count and then keep on "acquiring it". After a certain point the acquire call will block all the future
-# invocations and the method/ behavior /critical section is protected thereby providing concurrency/synchronization
-# as desired.
+# locks and a counter, but why re-invent the wheel? Typically, you initialize a Semaphore by a count and then keep on
+# "acquiring it". After a certain point the acquire call will block preventing access to the method/critical section
+# thereby providing concurrency/synchronization as desired.
 #
 # Let's try to understand this by simulating a "parking lot problem" that we experience in everyday life. A very
 # standard interview question ;). So we know there are specific # of slots in a parking lot. Any additional cars
@@ -82,6 +81,7 @@ class ParkingLot:
         token = str(uuid.uuid4())  # we generate a unique identifier using the standard library
         self.__space[token] = car  # and we will then use the token that's provided to mark our car. In Java, this is
         # equivalent to saying map.put(token, car)
+        print(f"{car.owner}'s car was parked successfully. Token: {token}")
         return token
 
     def release_car(self, token: str) -> Car | None:
@@ -140,13 +140,10 @@ class Vallet:
         returned from a function Java lacks this feature out of the box. Yes you can import libraries and do the same
         but python has it inbuilt!
         """
-        if self.parking_lot.has_empty_slots():  # so we check if the parking lot has empty slots. IF there are...
-            token = self.parking_lot.assign_car(car)  # we assign the car to the parking lot and get a token in return
-            car.assign_token(token)  # we then assign the token to the car for unique identification.
-            return token, car.owner  # and return the token and the car owner's name for bookkeeping.
-        else:
-            return None, car.owner  # else we return a None indicating the car couldn't be parked as the slots were
-            # not empty
+
+        token = self.parking_lot.assign_car(car)  # we assign the car to the parking lot and get a token in return
+        car.assign_token(token)  # we then assign the token to the car for unique identification.
+        return token, car.owner  # and return the token and the car owner's name for bookkeeping.
 
     def unpark(self, token: str) -> Car | None:
         if not token:  # ofcourse we return nothing if there is no token

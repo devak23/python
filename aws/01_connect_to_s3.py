@@ -9,14 +9,17 @@ import boto3
 # You might be wondering what is boto and boto3? Boto has become the official AWS SDK for Python. Boto is a Portuguese
 # name given to several types of dolphins in the Amazon river. You might wonder what are dolphins doing in a river!?
 # Indeed they exist!! Check: https://en.wikipedia.org/wiki/Boto#:~:text=Boto%20is%20a%20Portuguese%20name,are%20often%20considered%20primitive%20dolphins.
-# Boto3 replaced Boto2 which lacks compatibility with latest versions of Python. Anyhow...
+# Boto3 replaced Boto2 which lacks compatibility with the latest versions of Python. Anyhow...
 
 s3r = boto3.resource('s3')  # create a handle to S3 resource
 s3c = boto3.client('s3')  # create a handle to the S3 client
 
 
-def show_cors_info():
-    cors = s3c.get_bucket_cors(Bucket='abhay.s3.documents.test1')
+def show_cors_info(bucket: str) -> None:
+    """
+    This method uses the S3 client and gets the CORS configurationt that has been set for
+    """
+    cors = s3c.get_bucket_cors(Bucket=bucket)
     print(cors)
 
 
@@ -55,8 +58,9 @@ if __name__ == '__main__':
     # OUTPUT: abhay.s3.documents.test1
 
     # Now let's try to print some CORS info.
+    bucket_name = 'abhay.s3.documents.test1'
     try:
-        show_cors_info()
+        show_cors_info(bucket_name)
         cors_config_set = True
     except:
         cors_config_set = False
@@ -88,11 +92,11 @@ if __name__ == '__main__':
                 'MaxAgeSeconds': 3000
             }]
         }
-        s3c.put_bucket_cors(Bucket='abhay.s3.documents.test1', CORSConfiguration=cors_configuration)
+        s3c.put_bucket_cors(Bucket=bucket_name, CORSConfiguration=cors_configuration)
 
     # Now lets print the cors info again.
     try:
-        show_cors_info()
+        show_cors_info(bucket_name)
     except:
         # and yet an error again: An error occurred (NoSuchBucket) when calling the GetBucketCors operation: The
         # specified bucket does not exist. We know for sure that the bucket exists (else why would it print it),
@@ -123,8 +127,8 @@ if __name__ == '__main__':
 
         bucket_policy_json = json.dumps(bucket_policy)
         print(bucket_policy_json)
-        s3c.put_bucket_policy(Bucket='abhay.s3.documents.test1', Policy=bucket_policy_json)
-        print('Policy applied!')
+        s3c.put_bucket_policy(Bucket=bucket_name, Policy=bucket_policy_json)
+        print(f'Policy applied!')
 
         # OUTPUT:
         # abhay.s3.documents.test1

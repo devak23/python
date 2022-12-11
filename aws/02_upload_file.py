@@ -2,13 +2,13 @@
 import io
 
 import boto3
+import botocore.client
 from boto3.resources.base import ServiceResource
 
-ACCESS_KEY_ID = ''  # Read further
-ACCESS_KEY_SECRET = ''  # Read further
+BUCKET_NAME = 'abhay.s3.documents.test1'
 
 # First we need to create a session with boto3
-session1 = boto3.Session(aws_access_key_id=ACCESS_KEY_ID, aws_secret_access_key=ACCESS_KEY_SECRET)
+session1 = boto3.Session(aws_access_key_id="my_aws_key", aws_secret_access_key="my_aws_secret_key")
 
 
 # Now I could hard code the secret and the access key id in the code itself, but what kind of programmer do you take
@@ -20,41 +20,63 @@ session1 = boto3.Session(aws_access_key_id=ACCESS_KEY_ID, aws_secret_access_key=
 # jproperties module first using the command: pip install jproperties
 
 def read_aws_keys() -> tuple[str, str]:
-    global ACCESS_KEY_ID, ACCESS_KEY_SECRET
     from jproperties import Properties
+
     # The Properties object is very similar to a Dictionary Object.
     aws_config = Properties()
+
     # We read the properties file into the aws_config properties Object
     with open('aws_keys.properties', 'rb') as config_file:
         aws_config.load(config_file)
+
     # and now reading those properties is peanuts. However, know that - the value part is stored in a named tuple of
     # data and metadata. This Object is called PropertyTuple. We will look into metadata later on.
-    ACCESS_KEY_ID = aws_config.get("aws.access.key.id").data  # we extract only the data part of it
-    ACCESS_KEY_SECRET = aws_config.get("aws.access.key.secret").data
+    access_key_id = aws_config.get("aws.access.key.id").data  # we extract only the data part of it
+    access_key_secret = aws_config.get("aws.access.key.secret").data
 
     # if you forget the '.data' you will get the following error:
     # TypeError: sequence item 0: expected str instance, PropertyTuple found
 
-    return ACCESS_KEY_ID, ACCESS_KEY_SECRET
+    return access_key_id, access_key_secret
 
 
-def upload_data(user_data: bytes, s3_file_name: str):
+def file_exists(s3_file_name) -> bool:
     s3r = initialize_s3_resource()
 
-    # We then create an S3 Object into our bucket which points to a file called hello_s3.txt
-    s3_object = s3r.Object('abhay.s3.documents.test1', s3_file_name)
-    # and we then put the data into the S3 object.
-    result = s3_object.put(Body=user_data)
+    # What we are doing here is a "HEAD" request for a single "key" i.e. our filename. This request is very FAST even
+    # if our file is very large. The other way is to do a "get" directly as we might want to use the file
+    try:
+        s3r.Object(BUCKET_NAME, s3_file_name).load()
+        return True
+    except botocore.client.ClientError as e:
+        return False if e.response['Error']['Code'] == '404' else True
 
-    response = result.get('ResponseMetadata')
-    if response.get('HTTPStatusCode') == 200:
-        print('Data uploaded Successfully')
+
+def upload_data(user_data: bytes, s3_file_name: str, overwrite: bool = False):
+    s3r = initialize_s3_resource()
+
+    # first we check if the data we are attempting to store exists on S3.
+    exists = file_exists(s3_file_name)
+    print(f'File exists: {exists}')
+
+    if not exists or (exists and overwrite):
+        # We then create an S3 Object into our bucket which points to a file called hello_s3.txt
+        s3_object = s3r.Object(BUCKET_NAME, s3_file_name)
+        # and we then put the data into the S3 object.
+        result = s3_object.put(Body=user_data)
+
+        response = result.get('ResponseMetadata')
+        if response.get('HTTPStatusCode') == 200:
+            print('Data uploaded Successfully')
+        else:
+            print('Data Not Uploaded')
     else:
-        print('Data Not Uploaded')
+        print(f'The file {s3_file_name} exists already on S3')
 
 
 def upload_file(f: io.TextIOWrapper, s3_file_name: str) -> None:
     pass
+
 
 def initialize_s3_resource() -> ServiceResource:
     access_key_id, access_key_secret = read_aws_keys()
@@ -65,16 +87,44 @@ def initialize_s3_resource() -> ServiceResource:
     return s3r
 
 
+def upload_my_file(file: str, s3_file_name: str, overwrite: bool = False) -> None:
+    s3r = initialize_s3_resource()
+    exists = file_exists(s3_file_name)
+    print (f"{s3_file_name} exists: {exists}")
+
+    if not exists or (exists and overwrite):
+        result = s3r.Bucket(BUCKET_NAME).upload_file(file, s3_file_name)
+        print (f"File {s3_file_name} uploaded successfully on S3")
+    else:
+        print(f'The file {s3_file_name} already exists. Not uploading again.')
+
+
 if __name__ == '__main__':
     # the data could come from anywhere. For simplicity, lets hard code.
     data = b"Hello S3!!"
-    upload_data(data, 'hello_s3.txt')
-    upload_data(open('quotes.txt','rb'), "quotes-data.txt")
+    upload_data(data, 'hello_s3.txt', overwrite=True)
+    # here is another way if you want to upload contents coming from a file. You open a stream of data with "open"
+    # API call and that will pass on the bytes to S3
+    upload_data(open('quotes.txt', 'rb'), "quotes-data.txt")
 
-# OUTPUT:
-# File uploaded Successfully
+    # OUTPUT:
+    # File exists: True
+    # Data uploaded Successfully
+    # File exists: True
+    # The file quotes-data.txt exists already on S3
 
-# What if you had a file that you wanted to upload? I have here a set of beautiful quotes that I want to upload. So here goes:
+    # Great! What if you had a file that you wanted to upload? I have here a set of beautiful quotes that I want to
+    # upload. So here goes:
+    upload_my_file('quotes.txt', "quotes-file.txt", overwrite=True)
 
-def upload_file(file: str) -> None:
-    pass
+    # OUTPUT:
+    # quotes-file.txt exists: False
+    # File quotes-file.txt uploaded successfully on S3
+
+# Bear in mind that the same operations can be performed using a boto3 client as well. So what's the difference
+# between a resource and a client? Well... Resources are higher-level abstractions of AWS services compared to
+# clients. Resources are the recommended pattern to use boto3 as you don’t have to worry about a lot of the
+# underlying details when interacting with AWS services. As a result, code written with Resources tends to be simpler.
+#
+# However, Resources aren’t available for all AWS services. In such cases, there is no other choice but to use a
+# Client instead.

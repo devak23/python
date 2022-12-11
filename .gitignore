@@ -102,3 +102,4 @@ ENV/
 
 .idea
 .iml
+aws/aws_keys.properties

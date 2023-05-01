@@ -14,5 +14,13 @@ def is_even(number):
     return number % 2 == 0
 
 
+def read_number():
+    try:
+        return int(input('Enter an integer value: '))
+    except ValueError:
+        print('Invalid value entered')
+
+
 if __name__ == '__main__':
-    print("Is the number 45 even? ", is_even(45))
+    number = read_number()
+    print(f"Is the number {number} even? ", is_even(number))

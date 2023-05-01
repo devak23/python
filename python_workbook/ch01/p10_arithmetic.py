@@ -47,7 +47,7 @@ class Arithmetic:
             if num2 == 0:
                 raise ValueError("Division by zero error")
             else:
-                return num1 / num2
+                return round(num1 / num2, 2)
         raise NULL_PARAM_ERROR
 
     def remainder(self, num1, num2):
@@ -60,9 +60,8 @@ class Arithmetic:
 
     def log_10(self, num1):
         if num1:
-            return log10(num1)
+            return round(log10(num1), 3)
         raise NULL_PARAM_ERROR
-
 
     def raiseTo(self, num1, num2):
         return pow(num1, num2)

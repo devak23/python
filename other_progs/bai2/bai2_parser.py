@@ -88,4 +88,4 @@ def process_file(parts):
 
 
 if __name__ == '__main__':
-    read_bai('./sample.bai2')
+    read_bai('sample.bai2')

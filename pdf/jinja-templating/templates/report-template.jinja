@@ -1,0 +1,88 @@
+<html>
+<head>
+    <link href="bootstrap.min.css" rel="stylesheet" id="bootstrap-css" />
+    <script src="bootstrap.min.js"></script>
+    <script src="jquery-1.11.1.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="invoice-title">
+                    <h2>Invoice</h2><h3 class="pull-right">Order # {{invoice.orderNumber}}</h3>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <address>
+                        <strong>Billed To:</strong><br>
+                            {{invoice.customer.billTo.name}}<br>
+                            {{invoice.customer.billTo.addr1}}<br>
+                            {{invoice.customer.billTo.addr2}}<br>
+                            {{invoice.customer.billTo.addr3}}
+                        </address>
+                    </div>
+                    <div class="col-xs-6 text-right">
+                        <address>
+                        <strong>Shipped To:</strong><br>
+                            {{invoice.customer.shipTo.name}}<br>
+                            {{invoice.customer.shipTo.addr1}}<br>
+                            {{invoice.customer.shipTo.addr2}}<br>
+                            {{invoice.customer.shipTo.addr3}}
+                        </address>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <address>
+                            <strong>Payment Method:</strong><br>
+                            Visa ending **** {{invoice.customer.creditCard[-4]}}<br>
+                            {{invoice.customer.email}}
+                        </address>
+                    </div>
+                    <div class="col-xs-6 text-right">
+                        <address>
+                            <strong>Order Date:</strong><br>
+                            {{invoice.orderDate}}<br><br>
+                        </address>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><strong>Order summary</strong></h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <td><strong>Item</strong></td>
+                                        <td class="text-center"><strong>Price</strong></td>
+                                        <td class="text-center"><strong>Quantity</strong></td>
+                                        <td class="text-right"><strong>Totals</strong></td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in invoice.items %}
+                                    <tr>
+                                        <td>{{item.name}}</td>
+                                        <td class="text-center">{{item.price}}</td>
+                                        <td class="text-center">{{item.quantity}}</td>
+                                        <td class="text-right">{{item.total}}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

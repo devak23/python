@@ -1,0 +1,57 @@
+{
+  "data": {
+    "invoice": {
+      "orderNumber": "12345",
+      "orderDate": "2023-12-20",
+      "customer": {
+        "name": "John Smith",
+        "email": "jsmith@email.com",
+        "creditCard": "3854-9806-1128-9088",
+        "billTo": {
+          "name": "John Smith",
+          "addr1": "38675",
+          "addr2": "Paseo Padre Parkway",
+          "city": "Fremont",
+          "state": "CA",
+          "zip": "94536"
+        },
+        "shipTo": {
+          "name": "Abhay K",
+          "addr1": "34675 Pensylvania Ave",
+          "addr2": "Fremont Boulevard",
+          "city": "Fremont",
+          "state": "CA",
+          "zip": "94536"
+        }
+      },
+      "items": [
+        {
+          "name": "BS-200",
+          "price": 10.99,
+          "quantity": 1,
+          "total": 10.99
+        },
+        {
+          "name": "BS-200",
+          "price": 10.99,
+          "quantity": 1,
+          "total": 10.99
+        },
+        {
+          "name": "BS-200",
+          "price": 10.99,
+          "quantity": 1,
+          "total": 10.99
+        },
+        {
+          "name": "BS-200",
+          "price": 10.99,
+          "quantity": 1,
+          "total": 10.99
+        }
+      ]
+    }
+  },
+  "errors": {
+  }
+}

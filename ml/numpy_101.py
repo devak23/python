@@ -3,7 +3,7 @@ import numpy as np
 my_list = [1, 2, 3]
 my_array = np.array(my_list)
 print(my_array)
-print(my_array.shape)
+print(my_array.shape)  # which prints the rows and columns of an array.
 
 ##
 # Prints: 
@@ -30,13 +30,13 @@ print(f"Entire Column: {my_array[:, 2]}")
 # First row: [1 2 3]
 # Second row: [3 4 5]
 # Last row: [3 4 5]
-# Specfic row: 3
+# Specific row: 3
 # Entire Column: [3 5]
 #
 
 # Let's do some math operations
-my_array1 = np.array([1,2,3])
-my_array2 = np.array([11,22,33])
+my_array1 = np.array([1, 2, 3])
+my_array2 = np.array([11, 22, 33])
 print(f"Addition = {my_array1 + my_array2}")
 print(f"Multiplication = {my_array1 * my_array2}")
 

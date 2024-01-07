@@ -1,7 +1,7 @@
 # following plotting gives us nature of data distribution. These are univariate plots
 
-import pandas as pd
 import matplotlib.pyplot as plt
+import pandas as pd
 
 col_names = ['Pregnancies', 'Glucose', 'BloodPressure', 'SkinThickness', 'Insulin', 'BMI', 'DiabetesPedigreeFunction',
              'Age', 'Outcome']

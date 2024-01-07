@@ -1,6 +1,6 @@
 import datetime
-from datetime import timedelta
 import random
+from datetime import timedelta
 
 import redis
 

@@ -1,5 +1,5 @@
-from threading import Thread, Condition
 import time
+from threading import Thread, Condition
 
 
 class FrequentTimer:

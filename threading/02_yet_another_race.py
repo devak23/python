@@ -19,10 +19,10 @@
 #
 # Coming back from the cliche...
 
+import time
 from collections import namedtuple
 from queue import Queue
 from threading import Thread
-import time
 
 # So we define a value holder class called as the HolyBook using a namedtuple. You must be a pro by now to understand
 # and use this snippet. For those who were dozing all this time, it creates a class 'on the fly' with two attributes

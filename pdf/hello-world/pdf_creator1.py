@@ -1,4 +1,5 @@
 import subprocess
+
 from fpdf import FPDF
 
 LIMIT_X = 208

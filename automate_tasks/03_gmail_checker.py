@@ -1,4 +1,5 @@
 from sys import argv
+
 from selenium import webdriver
 
 if len(argv) < 2:

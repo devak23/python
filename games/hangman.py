@@ -1,7 +1,9 @@
 #!/usr/bin/python
 
 import random
+
 import readchar
+
 from game_stats import GameStats
 
 dictionary = ['zugzwang', 'position', 'blunder', 'checkmate']

@@ -8,10 +8,10 @@
 # I know it's not as flashy as it sounds, but remember, we are just speaking a different language here (no pun intended)
 # The concept will still remain the same only the syntax changes. So here we go again...
 
+import time
 from collections import namedtuple
 from queue import Queue
 from threading import Thread, Lock
-import time
 
 HolyBook = namedtuple('HolyBook', ['name', 'quote'])
 

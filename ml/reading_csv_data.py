@@ -1,7 +1,7 @@
 import csv
+
 import numpy
 import pandas
-
 
 # Reading a CSV file in 3 ways
 filename = 'pima-indians-diabetes.csv'

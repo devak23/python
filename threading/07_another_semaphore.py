@@ -1,6 +1,6 @@
 # importing the modules
-from threading import *
 import time
+from threading import *
 
 # creating thread instance where count = 3
 my_obj = Semaphore(4)

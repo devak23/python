@@ -1,10 +1,10 @@
 #!/usr/bin/python
 
 import argparse
-from pathlib import Path
+import glob
 import os
 import time
-import glob
+from pathlib import Path
 
 
 # --------------------------------------------------------------------------------------------------------------

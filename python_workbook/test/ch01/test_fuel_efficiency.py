@@ -2,6 +2,7 @@ import unittest
 
 from python_workbook.ch01.p11_fuel_efficiency import FuelEfficiency
 
+
 class TestFuelEfficiency(unittest.TestCase):
     def setUp(self):
         self.fe = FuelEfficiency()

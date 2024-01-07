@@ -1,5 +1,6 @@
-import requests
 import threading
+
+import requests
 
 websites = [
     'https://www.rbi.org.in/',

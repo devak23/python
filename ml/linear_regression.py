@@ -4,9 +4,6 @@
 
 import matplotlib.pyplot as plt
 from scipy import stats
-import numpy as np
-
-
 
 # define x an y arrays
 age_x = [4,6,7,6,1,16,1,8,3,10,11,5]

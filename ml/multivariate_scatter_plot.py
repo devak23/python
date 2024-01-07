@@ -1,5 +1,5 @@
-import pandas as pd
 import matplotlib.pyplot as plt
+import pandas as pd
 from pandas.plotting import scatter_matrix
 
 col_names = ['Preg', 'Glucose', 'BP', 'Skin T', 'Insulin', 'BMI', 'D Pedigree',

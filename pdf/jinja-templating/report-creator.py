@@ -1,6 +1,7 @@
+import json
+
 from fpdf import FPDF
 from jinja2 import Environment
-import json
 
 with open('templates/report-template.jinja',"r") as f:
     template_string = " ".join(line.strip() for line in f)

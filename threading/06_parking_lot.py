@@ -30,7 +30,6 @@
 
 import uuid
 from threading import Semaphore
-from typing import Tuple
 from uuid import UUID
 
 AVAILABLE_SLOTS = 5

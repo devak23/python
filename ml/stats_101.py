@@ -1,6 +1,6 @@
 import numpy as np
-from scipy import stats
 from matplotlib import pyplot as plt
+from scipy import stats
 
 # mean
 heart_rate_sample = np.array([80, 79, 66, 70, 77, 65, 81, 71, 78, 66, 68, 67, 64, 71, 82, 69])

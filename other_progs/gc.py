@@ -1,4 +1,6 @@
-import gc, sys
+import gc
+import sys
+
 
 def make_cycle():
     """ This method creates cyclic objects which cannot be detected by

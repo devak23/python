@@ -2,6 +2,7 @@
 # into the /tmp folder before running this test.
 
 import unittest
+
 from other_progs.wc import WordCount, ContentAnalysis
 
 

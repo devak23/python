@@ -1,6 +1,6 @@
+import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.linear_model import LinearRegression
-import matplotlib.pyplot as plt
 
 data = pd.read_csv("datasets/oranges.csv")
 # figure out the dependent and independent variables

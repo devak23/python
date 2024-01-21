@@ -11,14 +11,15 @@ data = read_csv('pima-indians-diabetes.csv')
 array = data.values
 
 ## Separate the array into input and output components
-X = array[:, 0:8] # input component
-y = array[:, 8] # output component
+X = array[:, 0:8]  # input component
+y = array[:, 8]  # output component
 
 print("------------------X----------------------")
 print(X)
 print("------------------Y----------------------")
 print(y)
 
+# Scaling the data
 scaler = MinMaxScaler(feature_range=(0, 1))
 rescaledX = scaler.fit_transform(X)
 

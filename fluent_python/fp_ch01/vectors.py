@@ -16,7 +16,7 @@ class Vector:
         return bool(abs(self))
 
     def __add__(self, other):
-        x = self.x + other.x;
+        x = self.x + other.x
         y = self.y + other.y
         return Vector(x, y)
 

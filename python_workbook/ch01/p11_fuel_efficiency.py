@@ -5,7 +5,7 @@
 # units and displays the equivalent fuel efficiency in Canadian units.
 
 def user_input():
-    choice = input("Would you like to enter mileage in miles per gallon (mpg) or kilometers per litre (kpl): ")
+    choice = input("Would you like to enter mileage in miles per gallon (mpg) or kilometers per litre (kpl) ? : ")
     if choice and (choice.lower() == 'mpg' or choice.lower() == 'kpl'):
         try:
             mileage = float(input("Enter the mileage: "))

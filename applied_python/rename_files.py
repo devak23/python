@@ -1,56 +1,43 @@
 import os
 
+ALLOWED_EXTENSIONS = ['.pdf', '.PDF', '.epub', '.EPUB']
 
 def rename_files(folder):
     print("Renaming files in the folder: {}".format(folder))
-    with os.scandir(folder) as files:
-        for file in files:
-            if not file.is_dir() and file.name.strip().startswith("_OceanofPDF.com_"):
-                old_name = os.path.join(folder, file.name)
-                new_name = os.path.join(folder, file.name.replace("_OceanofPDF.com_", ""))
-                print ("old_name: {}, new_name: {}".format(old_name, new_name))
-                os.rename(old_name, new_name)
-            else:
-                print("COMPLETELY SKIPPING: {}".format(file.name))
+    files = [f for f in os.listdir(folder)
+             if is_extn_allowed(f) and "_" in f]
+
+    for f in files:
+        new_name = f.replace("_OceanofPDF.com_","").replace("_"," ")
+        old_file_path = os.path.join(folder, f)
+        new_file_path = os.path.join(folder, new_name)
+        if not os.path.exists(new_file_path):
+            os.rename(old_file_path, new_file_path)
+            print(f"Renamed: {old_file_path} to {new_file_path}")
+
+
+def is_extn_allowed(f):
+    return [xtn for xtn in ALLOWED_EXTENSIONS if f.endswith(xtn)]
 
 
 if __name__ == "__main__":
     rename_files("/home/abhay/Downloads/")
 
 # output:
-# /usr/bin/python3.13 /home/abhay/Workspace/group-pogramming/rename_files.py
-# Renaming files in the folder: /home/abhay/Downloads/PDF/Python
-# old_name: /home/abhay/Downloads/PDF/Python/_OceanofPDF.com_Visualizing_Quantum_Mechanics_with_Python_-_Stephen_Spicklemire.pdf, new_name: /home/abhay/Downloads/PDF/Python/Visualizing_Quantum_Mechanics_with_Python_-_Stephen_Spicklemire.pdf
-# old_name: /home/abhay/Downloads/PDF/Python/_OceanofPDF.com_Advanced_Python_Programming_-_Robert_Karamagi.pdf, new_name: /home/abhay/Downloads/PDF/Python/Advanced_Python_Programming_-_Robert_Karamagi.pdf
-# COMPLETELY SKIPPING: Mastering Basic Algorithms in the Python Language.pdf
-# old_name: /home/abhay/Downloads/PDF/Python/_OceanofPDF.com_5_Python_Basic_Games_You_Must_Learn_To_Code_-_Ritesh_Kumar.pdf, new_name: /home/abhay/Downloads/PDF/Python/5_Python_Basic_Games_You_Must_Learn_To_Code_-_Ritesh_Kumar.pdf
-# old_name: /home/abhay/Downloads/PDF/Python/_OceanofPDF.com_Python_Mastery_A_Hands-On_Guide_-_Ben_Marriachi.pdf, new_name: /home/abhay/Downloads/PDF/Python/Python_Mastery_A_Hands-On_Guide_-_Ben_Marriachi.pdf
-# COMPLETELY SKIPPING: Let Us Python by Yashavant Kanetkar Aditya Kanetkar.pdf
-# old_name: /home/abhay/Downloads/PDF/Python/_OceanofPDF.com_Functional_Python_Programming_-_Steven_F_Lott.pdf, new_name: /home/abhay/Downloads/PDF/Python/Functional_Python_Programming_-_Steven_F_Lott.pdf
-# old_name: /home/abhay/Downloads/PDF/Python/_OceanofPDF.com_Learn_AI_with_Python_-_Gaurav_Leekha.pdf, new_name: /home/abhay/Downloads/PDF/Python/Learn_AI_with_Python_-_Gaurav_Leekha.pdf
-# old_name: /home/abhay/Downloads/PDF/Python/_OceanofPDF.com_Python_Programming_-_Brian_Evenson.pdf, new_name: /home/abhay/Downloads/PDF/Python/Python_Programming_-_Brian_Evenson.pdf
-# COMPLETELY SKIPPING: let-us-python-solutions-5th-edition.epub
-# old_name: /home/abhay/Downloads/PDF/Python/_OceanofPDF.com_Designing_Data_intensive_application_in_Python_-_Aarav_Joshi.pdf, new_name: /home/abhay/Downloads/PDF/Python/Designing_Data_intensive_application_in_Python_-_Aarav_Joshi.pdf
-# COMPLETELY SKIPPING: Microservices Patterns_ With examples in Java ( PDFDrive ).pdf
-# old_name: /home/abhay/Downloads/PDF/Python/_OceanofPDF.com_Learn_OpenCV_with_Python_by_Exercises_-_Jeffrey_Leon_Stroup.pdf, new_name: /home/abhay/Downloads/PDF/Python/Learn_OpenCV_with_Python_by_Exercises_-_Jeffrey_Leon_Stroup.pdf
-# COMPLETELY SKIPPING: let-us-python.pdf
-# old_name: /home/abhay/Downloads/PDF/Python/_OceanofPDF.com_Python_in_Depth_Programmers_Guide_-_Nathan_Venture.pdf, new_name: /home/abhay/Downloads/PDF/Python/Python_in_Depth_Programmers_Guide_-_Nathan_Venture.pdf
-# old_name: /home/abhay/Downloads/PDF/Python/_OceanofPDF.com_Useful_Python_-_Stuart_Langridge.pdf, new_name: /home/abhay/Downloads/PDF/Python/Useful_Python_-_Stuart_Langridge.pdf
-# COMPLETELY SKIPPING: learn-python3-the-hard-way-nov-15-2018.pdf
-# old_name: /home/abhay/Downloads/PDF/Python/_OceanofPDF.com_Python_Programming_for_Lucrative_Careers_-_Hubie_Chen.pdf, new_name: /home/abhay/Downloads/PDF/Python/Python_Programming_for_Lucrative_Careers_-_Hubie_Chen.pdf
-# old_name: /home/abhay/Downloads/PDF/Python/_OceanofPDF.com_Think_Python_3rd_Ed_Final_Release_-_Allen_B_Downey.pdf, new_name: /home/abhay/Downloads/PDF/Python/Think_Python_3rd_Ed_Final_Release_-_Allen_B_Downey.pdf
-# old_name: /home/abhay/Downloads/PDF/Python/_OceanofPDF.com_Pydonts_-_Write_elegant_Python_code_-_Rodrigo_Girao_Serrao.pdf, new_name: /home/abhay/Downloads/PDF/Python/Pydonts_-_Write_elegant_Python_code_-_Rodrigo_Girao_Serrao.pdf
-# old_name: /home/abhay/Downloads/PDF/Python/_OceanofPDF.com_Python_for_TensorFlow_Pocket_Primer_-_Oswald_Campesato.pdf, new_name: /home/abhay/Downloads/PDF/Python/Python_for_TensorFlow_Pocket_Primer_-_Oswald_Campesato.pdf
-# old_name: /home/abhay/Downloads/PDF/Python/_OceanofPDF.com_1000_Python_Examples_-_Gabor_Szabo.pdf, new_name: /home/abhay/Downloads/PDF/Python/1000_Python_Examples_-_Gabor_Szabo.pdf
-# old_name: /home/abhay/Downloads/PDF/Python/_OceanofPDF.com_Pythonic_AI_A_beginners_guide_-_Arindam_Banerjee.pdf, new_name: /home/abhay/Downloads/PDF/Python/Pythonic_AI_A_beginners_guide_-_Arindam_Banerjee.pdf
-# COMPLETELY SKIPPING: cookie
-# old_name: /home/abhay/Downloads/PDF/Python/_OceanofPDF.com_Python_3_Using_ChatGPT__GPT-4_-_O_Oswald_Campesato.pdf, new_name: /home/abhay/Downloads/PDF/Python/Python_3_Using_ChatGPT__GPT-4_-_O_Oswald_Campesato.pdf
-# COMPLETELY SKIPPING: designing-microservices-with-django.pdf
-# COMPLETELY SKIPPING: DATA STRUCTURES THROUGH PYTHON(R20A0503).pdf
-# COMPLETELY SKIPPING: The Pythonic Way.pdf
-# old_name: /home/abhay/Downloads/PDF/Python/_OceanofPDF.com_Python_One-Liners_-_Christian_Mayer.pdf, new_name: /home/abhay/Downloads/PDF/Python/Python_One-Liners_-_Christian_Mayer.pdf
-# old_name: /home/abhay/Downloads/PDF/Python/_OceanofPDF.com_Better_Python_Code_-_David_Mertz.pdf, new_name: /home/abhay/Downloads/PDF/Python/Better_Python_Code_-_David_Mertz.pdf
-# old_name: /home/abhay/Downloads/PDF/Python/_OceanofPDF.com_Introduction_to_Python_and_LLMs_-_Dilyan_Grigorov.pdf, new_name: /home/abhay/Downloads/PDF/Python/Introduction_to_Python_and_LLMs_-_Dilyan_Grigorov.pdf
-# old_name: /home/abhay/Downloads/PDF/Python/_OceanofPDF.com_100_Days_of_Coding_in_Python_-_Giuliana_Carullo.pdf, new_name: /home/abhay/Downloads/PDF/Python/100_Days_of_Coding_in_Python_-_Giuliana_Carullo.pdf
-#
+# Renaming files in the folder: /home/abhay/Downloads/
+# Renamed: /home/abhay/Downloads/Grokking_Web_Application_Security_-_Malcolm_McDonald.pdf to /home/abhay/Downloads/Grokking Web Application Security - Malcolm McDonald.pdf
+# Renamed: /home/abhay/Downloads/Grokking_Machine_Learning_-_Luis_Serrano.pdf to /home/abhay/Downloads/Grokking Machine Learning - Luis Serrano.pdf
+# Renamed: /home/abhay/Downloads/Learning_Functional_Programming_Managing_Code_Complexity_-_Jack_Widman.pdf to /home/abhay/Downloads/Learning Functional Programming Managing Code Complexity - Jack Widman.pdf
+# Renamed: /home/abhay/Downloads/Regular_Expressions_Machinery_-_Staffan_Noteberg.pdf to /home/abhay/Downloads/Regular Expressions Machinery - Staffan Noteberg.pdf
+# Renamed: /home/abhay/Downloads/Grokking_Concurrency_-_Kirill_Bobrov.pdf to /home/abhay/Downloads/Grokking Concurrency - Kirill Bobrov.pdf
+# Renamed: /home/abhay/Downloads/Rust Essentials A Comprehensive Guide - Aarav_Joshi.pdf to /home/abhay/Downloads/Rust Essentials A Comprehensive Guide - Aarav Joshi.pdf
+# Renamed: /home/abhay/Downloads/OBJECT_ORIENTED_AND_FUNCTIONAL_PROGRAMMING_-_Pena_Leonel.pdf to /home/abhay/Downloads/OBJECT ORIENTED AND FUNCTIONAL PROGRAMMING - Pena Leonel.pdf
+# Renamed: /home/abhay/Downloads/Selected Writings on Computing - Dijkstra, Edsger W._5544.pdf to /home/abhay/Downloads/Selected Writings on Computing - Dijkstra, Edsger W. 5544.pdf
+# Renamed: /home/abhay/Downloads/Grokking_Streaming_Systems_-_Josh_Fischer.pdf to /home/abhay/Downloads/Grokking Streaming Systems - Josh Fischer.pdf
+# Renamed: /home/abhay/Downloads/grokking_artificial_intelligence_algorithms_-_Rishal_Hurbans.pdf to /home/abhay/Downloads/grokking artificial intelligence algorithms - Rishal Hurbans.pdf
+# Renamed: /home/abhay/Downloads/JavaScript_QuickStart_Guide_-_Robert_Oliver.pdf to /home/abhay/Downloads/JavaScript QuickStart Guide - Robert Oliver.pdf
+# Renamed: /home/abhay/Downloads/Charles Petzold-Code_ The Hidden Language of Computer Hardware and Software-Microsoft Press (2000).pdf to /home/abhay/Downloads/Charles Petzold-Code  The Hidden Language of Computer Hardware and Software-Microsoft Press (2000).pdf
+# Renamed: /home/abhay/Downloads/Grokking_The_Java_Developer_Interview__Mor_-_Jatin_Arora.pdf to /home/abhay/Downloads/Grokking The Java Developer Interview  Mor - Jatin Arora.pdf
+# Renamed: /home/abhay/Downloads/Grokking_Algorithms_Blueprint_Advanced_-_William_Turner.pdf to /home/abhay/Downloads/Grokking Algorithms Blueprint Advanced - William Turner.pdf
+# Renamed: /home/abhay/Downloads/Clean Code With Java - Best practices 101- Aarav_Joshi.pdf to /home/abhay/Downloads/Clean Code With Java - Best practices 101- Aarav Joshi.pdf
 # Process finished with exit code 0

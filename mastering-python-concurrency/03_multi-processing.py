@@ -14,8 +14,8 @@ def compute(data):
     return result
 
 def invoke():
+    data_chunks = [range(100000), range(100000, 200000), range(200000, 300000)]
     with mp.Pool(processes=8) as pool:
-        data_chunks = [range(100000), range(100000, 200000), range(200000, 300000)]
         results = pool.map(compute, data_chunks)
     print(f"Computed results: {results}")
 
@@ -27,6 +27,11 @@ if __name__ == '__main__':
 # Advanced practitioners must evaluate trade-offs such as the overhead introduced by process spawning, data
 # serialization cost for inter-process messaging, and the proper partitioning of CPU-bound tasks to achieve optimal
 # scaling.
+
+# In this paradigm, each spawned process runs in isolation from the others, and thus, the GIL is instantiated
+# independently within each process. For advanced practitioners, careful design considerations must include strategies
+# for efficient serialization and deserialization of data between processes and for managing shared resources through
+# mechanisms such as shared memory or inter-process communication (IPC).
 
 
 # Each concurrency model comes with intrinsic trade-offs.

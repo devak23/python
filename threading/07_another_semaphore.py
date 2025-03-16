@@ -18,9 +18,7 @@ def show(the_name):
         # calling release method
         my_obj.release()
 
-    # creating multiple thread
-
-
+# creating multiple thread
 thread_1 = Thread(target=show, args=('Thread 1',))
 thread_2 = Thread(target=show, args=('Thread 2',))
 thread_3 = Thread(target=show, args=('Thread 3',))

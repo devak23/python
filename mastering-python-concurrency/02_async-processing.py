@@ -14,6 +14,6 @@ async def process_all():
 if __name__ == '__main__':
     asyncio.run(process_all())
 
-# This implementation leverages asyncio.as_completed to process results as they are available, thereby
-# maximizing throughput by minimizing idle time. Advanced developers may extend this pattern by integrating
-# timeout management, cancellation policies, and even interfacing with synchronous libraries via executors
+# This implementation leverages asyncio.as_completed to process results as they are available, thereby maximizing
+# throughput by minimizing idle time. Advanced developers may extend this pattern by integrating timeout management,
+# cancellation policies, and even interfacing with synchronous libraries via executors

@@ -5,10 +5,10 @@ ALLOWED_EXTENSIONS = ['.pdf', '.PDF', '.epub', '.EPUB']
 def rename_files(folder):
     print("Renaming files in the folder: {}".format(folder))
     files = [f for f in os.listdir(folder)
-             if is_extn_allowed(f) and "_" in f]
+             if is_extn_allowed(f)]
 
     for f in files:
-        new_name = f.replace("_OceanofPDF.com_","").replace("_"," ")
+        new_name = f.replace("_OceanofPDF.com_","").replace("_"," ").replace("-"," ").replace("   "," ")
         old_file_path = os.path.join(folder, f)
         new_file_path = os.path.join(folder, new_name)
         if not os.path.exists(new_file_path):

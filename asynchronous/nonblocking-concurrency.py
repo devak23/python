@@ -1,16 +1,20 @@
 import asyncio
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 async def task1():
     await asyncio.sleep(0.2)
-    print("Task 1")
+    logger.info("Task 1")
     await asyncio.sleep(1)
-    print("Task 1 done")
+    logger.info("Task 1 done")
 
 async def task2():
     await asyncio.sleep(0.5)
-    print("Task 2")
+    logger.info("Task 2")
     await asyncio.sleep(1)
-    print("Task 2 done")
+    logger.info("Task 2 done")
 
 async def main():
     await asyncio.gather(task1(), task2())

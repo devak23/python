@@ -1,9 +1,13 @@
 import asyncio
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 async def main():
-    print("Hello, world!")
+    logger.info("Hello, world!")
     await asyncio.sleep(1)
-    print("Goodbye, world!")
+    logger.info("Goodbye, world!")
 
 asyncio.run(main())
 

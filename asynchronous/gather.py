@@ -13,7 +13,8 @@ async def task2():
 
 async def main():
     tasks = [task1(), task2()]
-    results = await asyncio.gather(*tasks)
+    results = await asyncio.gather(*tasks) # asyncio.gather allows you to gather the results of multiple async functions into a single result
+    # it awaits for all the tasks and returns their results as a list.
     logger.info(results)
 
 if __name__ == '__main__':

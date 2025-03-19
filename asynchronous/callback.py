@@ -1,9 +1,9 @@
 import asyncio
-from asynchronous import logger
-
+from util.logging_functions import logger
+from util.delay_functions import delay
 
 async def task1():
-    await asyncio.sleep(1)
+    await delay(2)
     return "Task 1 Completed"
 
 

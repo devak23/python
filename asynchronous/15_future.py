@@ -1,5 +1,5 @@
 import asyncio
-from asynchronous import logger
+from util.logging_functions import logger
 
 async def task1():
     await asyncio.sleep(1)

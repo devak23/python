@@ -42,5 +42,5 @@ if __name__ == '__main__':
 # concurrently alongside the CPU-bound work? In this instance it won’t because we create the two CPU-bound tasks first,
 # which, in effect, blocks the event loop from running anything else. This means the runtime of our application will be
 # the sum of time it took for our two cpu_bound_work tasks to finish plus the 4 seconds that our delay task took.
-# If we need to perform CPU-bound work and still want to use async / await syntax, we can do so. To do this we’ll still
-# need to use multiprocessing, and we need to tell asyncio to run our tasks in a process pool.
+# If we need to perform CPU-bound work and still want to use async / await syntax, we can do so using multiprocessing,
+# and we need to tell asyncio to run our tasks in a process pool.

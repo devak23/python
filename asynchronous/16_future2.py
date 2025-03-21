@@ -49,4 +49,36 @@ if __name__ == '__main__':
 # There is a strong relationship between tasks and futures. In fact, task directly inherits from future. A future can
 # be thought as representing a value that we won’t have for a while. A task can be thought as a combination of both a
 # coroutine and a future. When we create a task, we are creating an empty future and running the coroutine. Then,
-# when the coroutine has completed with either an exception or a result, we set the result or exception of the future.
+# when the coroutine has completed with either an exception or a result, we set the result or exception, of the future.
+
+# Given the relationship between futures and tasks, there is a similar relationship between tasks and coroutines.
+# After all, all these types can be used in await expressions. The common thread between these, is the "Awaitable"
+# abstract base class. This class defines one abstract double underscore method __await__ and anything that implements
+# the __await__ method can be used in an await expression.
+#
+# Coroutines inherit directly from Awaitable, as do futures. Tasks then extend futures,
+#                             ..----------------------------------------:.
+#                             .:=                                      ::.
+#                             .:=              Awaitable               ::.
+#                             .:=                                      ::.
+#                              ..-------------------=-------------------..
+#                                                  :-.
+#                                                  :-.
+#                                                  :-.
+#                    -------------------------------=:-----------------------------
+#                    .-                                                          -:.
+#                    .-                                                          -:.
+#                   .-#:                                                        .*=.
+# .--------------------+-------------------:.                 .-------------------:+=-------------------.
+# =                                        =                  .::                                     ::.
+# =                Coroutine               =                  .::            Future                   ::.
+# =                                        =                  .::                                     ::.
+# ----------------------------------------:-                  .-----------------------------------------.
+#                                                                                -.
+#                                                                                -.
+#                                                                               :#=.
+#                                                            .-------------------:+=-------------------.
+#                                                            ::                                      ::.
+#                                                            ::               Task                   ::.
+#                                                            ::                                      ::.
+#                                                            :---------------------------------------::.

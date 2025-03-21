@@ -9,7 +9,7 @@ console_handler = logging.StreamHandler()
 console_handler.setLevel(logging.DEBUG)
 
 # Create a formatter and add it to the handler
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+formatter = logging.Formatter('%(asctime)s - [%(levelname)s] - [%(module)s.%(funcName)s]:~  %(message)s')
 console_handler.setFormatter(formatter)
 
 # Add the handler to the logger

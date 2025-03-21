@@ -15,7 +15,7 @@ def async_timed(): # This is the main decorator function. It doesn’t take any 
         # We now create a new coroutine called wrapped. This is a wrapper around our original coroutine that takes its
         # arguments, *args and **kwargs, calls an await statement, and then returns the result.
         async def wrapped(*args, **kwargs) -> Any: # The `*args` and `**kwargs` allow the `wrapped` function to handle any combination of positional and keyword arguments for the original `func`.
-            logger.info(f"DECORATOR: Starting '{func.__name__}' with args: {args} and kwargs: {kwargs}")
+            #logger.info(f"DECORATOR: Starting '{func.__name__}' with args: {args} and kwargs: {kwargs}")
             start = time.time()
             try:
                 return await func(*args, **kwargs) # invoke the function

@@ -42,7 +42,7 @@ logger.info(f"Connection from {client_address}")
 
 buffer = b''
 data = b''
-BUFFER_SIZE = 8  # 8 bytes very low buffer size
+BUFFER_SIZE = 1024  # bytes
 try:
     while buffer[-2:] != b'\r\n':
         data = connection.recv(BUFFER_SIZE)
@@ -71,4 +71,10 @@ finally:
 
 # Due to the small buffer size, we try to receive two bytes and store it in our buffer. Then, we go into a loop,
 # checking each iteration to see if our buffer ends in a carriage return and a line feed. If it does not, we get two
-# more bytes and print out which bytes we received and append that to the buffer
+# more bytes and print out which bytes we received and append that to the buffer. There is a problem with this
+# implementation - the second connection initated with this program doesn't get to see any echo's from the echo server
+# but the first one does get the echo. his is due to the default blocking behavior of sockets. The methods accept and
+# recv block until they receive data. This means that once the first client connects, we will block waiting for it to
+# send its first echo message to us. This causes other clients to be stuck waiting for the next iteration of the
+# loop, which won’t happen until the first client sends us data. The non-blocking version is found in
+# 28_non-blocking-simple-server.py

@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from typing import Dict, Any
 
 
@@ -86,12 +87,14 @@ print_dict(my_dict1)
 import requests
 from lxml import html
 headers = {}
-headers['User-Agent'] = "Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:48.0) Gecko/20100101 Firefox/48.0"
-r = requests.get('https://finance.yahoo.com/quote/APPL', headers=headers)
+headers['User-Agent'] = "Mozilla/6.0 (X11; Ubuntu; Linux i586; rv:49.0) Gecko/20200202 Firefox/49.0"
+r = requests.get('http://finance.yahoo.com/quote/DLR?p=DLR', headers=headers)
 page_contents = html.fromstring(r.content)
 # print(page_contents.xpath('//*[@id="nimbus-app"]/section/section/section/article/section[1]/div[1]/div/div[1]/section/h1')[0].text)
-price = page_contents.xpath(
-    '//*[@id="nimbus-app"]/section/section/section/article/section[1]/div[2]/div[1]/section/div/section[1]/div[1]/div[1]/span')[0].text
-print(price)
-
+price_element = page_contents.xpath(
+    '//*[@id="nimbus-app"]/section/section/section/article/section[1]/div[2]/div[1]/section/div/section[1]/div[1]/div[1]/span')
+if price_element:
+    print(price_element[0].text)
+else:
+    print([])
 # ---------------------------------------------------------------

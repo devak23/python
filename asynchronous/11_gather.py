@@ -1,5 +1,6 @@
 import asyncio
-from asynchronous import logger
+from utils.logging_functions import logger
+
 
 async def task1():
     logger.info("Starting task1")

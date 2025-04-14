@@ -1,6 +1,6 @@
 import aiohttp
 import asyncio
-from util.logging_functions import logger
+from utils.logging_functions import logger
 
 
 async def fetch_data(session, url):

@@ -1,6 +1,7 @@
 import asyncio
-from util.delay_functions import delay
-from util.logging_functions import logger
+from utils.logging_functions import logger
+from utils.delay_functions import delay
+
 
 async def task1():
     logger.info("Task 1")

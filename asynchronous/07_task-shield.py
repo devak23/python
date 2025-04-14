@@ -1,5 +1,6 @@
-from util.delay_functions import delay
-from util.logging_functions import logger
+from utils.logging_functions import logger
+from utils.delay_functions import delay
+
 import asyncio
 
 

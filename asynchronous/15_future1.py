@@ -5,7 +5,8 @@
 # extract the result from the future
 
 from asyncio import Future
-from util.logging_functions import logger
+from utils.logging_functions import logger
+
 
 # We can create a future by calling its constructor. At this time, the future will have no result set on it,
 # so calling its done method will return False.

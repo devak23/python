@@ -4,9 +4,8 @@
 # when we have other coroutines or tasks that have "await" expressions.
 
 import asyncio
-from util.logging_functions import logger
-from util.timing_functions import async_timed
-from util.delay_functions import delay
+from utils.timing_functions import async_timed
+from utils.delay_functions import delay
 
 @async_timed()
 async def cpu_bound_work() -> int:

@@ -1,6 +1,7 @@
 import socket
 
-from asynchronous import logger
+from utils.logging_functions import logger
+
 
 # We first use the socket function to create a socket. Here, we specify two parameters to the socket function. The
 # first is socket.AF_INET—this tells us what type of address our socket will be able to interact with; in this case a

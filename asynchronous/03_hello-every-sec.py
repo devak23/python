@@ -1,6 +1,6 @@
 import asyncio
-from util.logging_functions import logger
-from util.delay_functions import delay
+from utils.logging_functions import logger
+from utils.delay_functions import delay
 
 async def hello_every_sec():
     for i in range(2):

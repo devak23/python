@@ -5,7 +5,8 @@
 # finally block so that any exceptions thrown don’t stop us from closing the loop
 
 import asyncio
-from util.logging_functions import logger
+from utils.logging_functions import logger
+
 
 
 async def main():

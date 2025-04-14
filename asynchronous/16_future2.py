@@ -1,6 +1,7 @@
 import asyncio
 from asyncio import Future
-from util.logging_functions import logger
+from utils.logging_functions import logger
+
 
 
 async def make_request() -> Future:

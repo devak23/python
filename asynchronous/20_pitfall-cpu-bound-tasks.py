@@ -9,8 +9,7 @@
 
 # Let's take a look at CPU bound code running in a coroutine
 import asyncio
-from util.logging_functions import logger
-from util.timing_functions import async_timed
+from utils.timing_functions import async_timed
 
 # We may have functions that perform computationally expensive calculations, such as looping over a large dictionary
 # or doing a mathematical computation. Where we have several of these functions with the potential to run

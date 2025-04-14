@@ -1,6 +1,6 @@
 import asyncio
-from util.logging_functions import logger
-from util.timing_functions import async_timed
+from utils.logging_functions import logger
+from utils.timing_functions import async_timed
 
 @async_timed()
 async def induce_delay(delay_seconds: int) -> int:

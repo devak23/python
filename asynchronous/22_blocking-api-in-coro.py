@@ -8,7 +8,7 @@
 
 import asyncio
 import requests
-from util.timing_functions import async_timed
+from utils.timing_functions import async_timed
 
 @async_timed()
 async def get_example_status() -> int:

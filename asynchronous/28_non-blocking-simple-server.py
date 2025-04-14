@@ -35,7 +35,8 @@ import socket
 import selectors
 from selectors import SelectorKey
 from typing import List, Tuple
-from asynchronous import logger
+from utils.logging_functions import logger
+
 
 selector = selectors.DefaultSelector()
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

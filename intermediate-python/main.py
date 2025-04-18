@@ -15,7 +15,7 @@ def main():
 
     yahoo_finance_workers = []
     for i in range(number_of_threads):
-        yahoo_finance_price_scheduler = YahooFinancePriceScheduler(input_queue=symbol_queue, output_queue=postgres_queue)
+        yahoo_finance_price_scheduler = YahooFinancePriceScheduler(input_queue=symbol_queue, output_queue=[postgres_queue])
         yahoo_finance_workers.append(yahoo_finance_price_scheduler)
 
     postgres_workers = []
@@ -24,7 +24,7 @@ def main():
         postgres_workers.append(postgres_worker)
 
     wiki_worker = WikiWorker()
-    for symbol in wiki_worker.get_sp_500_companies():
+    for symbol in wiki_worker.get_sp_500_companies_alternate():
         symbol_queue.put(symbol)
 
     for i in range(len(yahoo_finance_workers)):

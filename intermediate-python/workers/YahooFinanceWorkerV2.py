@@ -13,7 +13,12 @@ class YahooFinancePriceScheduler(threading.Thread):
     def __init__(self, input_queue, output_queue, **kwargs):
         super(YahooFinancePriceScheduler, self).__init__(**kwargs)
         self._input_queue = input_queue
-        self._output_queue = output_queue
+        temp_queue = output_queue
+        if type(temp_queue) != list:
+            # we are expecting the output queue to be a list of queues. So we have the flexibility wherein we can save
+            # to multiple databases.
+            temp_queue = [temp_queue]
+        self._output_queues = temp_queue
         self.start()
 
     def run(self):
@@ -25,14 +30,16 @@ class YahooFinancePriceScheduler(threading.Thread):
                 break
 
             if val == 'DONE':
+                for output_queue in self._output_queues:
+                    output_queue.put("DONE")
                 break
             else:
                 yahoo_finance_price_worker = YahooFinanceWorkerV2(symbol=val)
                 text_price = yahoo_finance_price_worker.get_price()
                 price = float(text_price.replace(',', '')) if text_price else None
-                if self._output_queue:
+                for output_queue in self._output_queues:
                     output_values = (val, price, datetime.now(timezone.utc))
-                    self._output_queue.put(output_values)
+                    output_queue.put(output_values)
 
 
 

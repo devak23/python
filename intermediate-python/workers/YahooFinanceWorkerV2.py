@@ -1,29 +1,38 @@
+import queue
 import threading
-import time
-import random
+from datetime import datetime, timezone
+from utils.logging_functions import logger
 
 import requests
 from lxml import html
 
-BASE_URL = 'http://finance.yahoo.com/quote/'
+BASE_URL = 'https://finance.yahoo.com/quote/'
 HEADERS = {'User-Agent': "Mozilla/6.0 (X11; Ubuntu; Linux i586; rv:49.0) Gecko/20200202 Firefox/49.0"}
 
 class YahooFinancePriceScheduler(threading.Thread):
-    def __init__(self, input_queue, **kwargs):
+    def __init__(self, input_queue, output_queue, **kwargs):
         super(YahooFinancePriceScheduler, self).__init__(**kwargs)
         self._input_queue = input_queue
+        self._output_queue = output_queue
         self.start()
 
     def run(self):
         while True:
-            val = self._input_queue.get() # blocking call
-            if val == 'Done':
+            try:
+                val = self._input_queue.get(timeout=10) # blocking call
+            except queue.Empty:
+                logger.error("Yahoo scheduler timing out. Stopping.")
                 break
 
-            yahoo_finance_price_worker = YahooFinanceWorkerV2(symbol=val)
-            price = yahoo_finance_price_worker.get_price()
-            print(price)
-            # time.sleep(random.random())
+            if val == 'DONE':
+                break
+            else:
+                yahoo_finance_price_worker = YahooFinanceWorkerV2(symbol=val)
+                text_price = yahoo_finance_price_worker.get_price()
+                price = float(text_price.replace(',', '')) if text_price else None
+                if self._output_queue:
+                    output_values = (val, price, datetime.now(timezone.utc))
+                    self._output_queue.put(output_values)
 
 
 

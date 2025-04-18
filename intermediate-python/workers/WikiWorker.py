@@ -18,6 +18,11 @@ class WikiWorker(object):
             yield symbol
 
 
+    def get_sp_500_companies_alternate(self):
+        symbols = ['MSFT','GOOG','AAPL']
+        for i in range(len(symbols)):
+            yield symbols[i]
+
 
     def get_sp_500_companies(self):
         response = requests.get(self._url)

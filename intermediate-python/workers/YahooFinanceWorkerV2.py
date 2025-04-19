@@ -1,5 +1,6 @@
 import queue
 import threading
+import time
 from datetime import datetime, timezone
 from utils.logging_functions import logger
 
@@ -10,10 +11,10 @@ BASE_URL = 'https://finance.yahoo.com/quote/'
 HEADERS = {'User-Agent': "Mozilla/6.0 (X11; Ubuntu; Linux i586; rv:49.0) Gecko/20200202 Firefox/49.0"}
 
 class YahooFinancePriceScheduler(threading.Thread):
-    def __init__(self, input_queue, output_queue, **kwargs):
-        super(YahooFinancePriceScheduler, self).__init__(**kwargs)
+    def __init__(self, input_queue, output_queues, **kwargs):
+        super(YahooFinancePriceScheduler, self).__init__(name="Test1", **kwargs)
         self._input_queue = input_queue
-        temp_queue = output_queue
+        temp_queue = output_queues
         if type(temp_queue) != list:
             # we are expecting the output queue to be a list of queues. So we have the flexibility wherein we can save
             # to multiple databases.
@@ -30,8 +31,6 @@ class YahooFinancePriceScheduler(threading.Thread):
                 break
 
             if val == 'DONE':
-                for output_queue in self._output_queues:
-                    output_queue.put("DONE")
                 break
             else:
                 yahoo_finance_price_worker = YahooFinanceWorkerV2(symbol=val)

@@ -1,5 +1,7 @@
 import os
 import threading
+import time
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql import text
@@ -30,10 +32,12 @@ Session = sessionmaker(bind=ENGINE, autoflush=True)
 
 class PostgresScheduler(threading.Thread):
     def __init__(self, input_queue, **kwargs):
-        super(PostgresScheduler, self).__init__(**kwargs)
+        if 'output_queue' in kwargs:
+            kwargs.pop('output_queues')
+        super(PostgresScheduler, self).__init__(name="Test2" , **kwargs)
         self._input_queue = input_queue
-        self.start()
         self._session = Session()
+        self.start()
 
     def run(self):
         while True:
@@ -43,6 +47,7 @@ class PostgresScheduler(threading.Thread):
                     self._session.close()
                     break
                 else:
+                    logger.info(f"Received: {val}")
                     symbol, price, extracted_time = val
                     postgres_worker = PostgresWorker(self._session, symbol, price, extracted_time)
                     postgres_worker.insert_into_db()

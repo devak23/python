@@ -6,20 +6,22 @@ queues:
     description: A queue that holds data to be stored in Postgres
 
 workers:
-#  - name: WikiWorker
-#    description: Scraps out symbols from wikipedia page
-#    module: workers.WikiWorker
-#    class: WikiWorker
-#    input_values:
-#      - 'https://en.wikipedia.org/wiki/List_of_S%26P_500_companies'
-#    output_queues:
-#      - SymbolQueue
+  - name: WikiWorker
+    note: Only have 1 instance, otherwise we will scrap the same symbol multiple times
+    description: Scraps out symbols from wikipedia page
+    instances: 1 # otherwise we duplicate the work. See note:
+    module: workers.WikiWorker
+    class: WikiWorkerScheduler
+    input_values:
+      - 'https://en.wikipedia.org/wiki/List_of_S%26P_500_companies'
+    output_queues:
+      - SymbolQueue
 
   - name: YahooFinanceWorker
     description: Pulls price data for a specific symbol from yahoo finance
     module: workers.YahooFinanceWorkerV2
     class: YahooFinancePriceScheduler
-    instances: 4
+    instances: 10
     input_queue: SymbolQueue
     output_queues:
       - PostgresQueue
@@ -28,6 +30,6 @@ workers:
     description: Saves the price data into the Postgres database
     module: workers.PostgresWorker
     class: PostgresScheduler
-    instances: 4
+    instances: 10
     input_queue: PostgresQueue
 

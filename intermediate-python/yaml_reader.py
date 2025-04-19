@@ -32,21 +32,30 @@ class YamlPipelineExecutor():
                 class_name = worker['class']
                 input_queue = worker.get('input_queue')
                 output_queues = worker.get('output_queues')
-                worker_name = worker['worker_name']
+                worker_name = worker['name']
                 instances = worker.get('instances', 1) # 1 is a fallback parameter
-                init_args =  {
-                    'input_queue': self._queues[input_queue] if input_queue else None,
-                    'output_queues': [self._queues[output_queue] for output_queue in output_queues] \
-                        if output_queues else None,
-                }
+                input_values = worker.get('input_values')
 
+                # Create the initial arguments dictionary
+                init_args = {}
+
+                # Add input queue if applicable
+                if input_queue:
+                    init_args['input_queue'] = self._queues[input_queue]
+
+                # Add output queues if applicable
+                if output_queues:
+                    init_args['output_queues'] = [self._queues[output_queue] for output_queue in output_queues]
+
+                if input_values:
+                    init_args['input_values'] = input_values
 
                 # dynamically import the module & then load the class
                 module = importlib.import_module(module_name)
                 worker_class = getattr(module, class_name)
 
                 # initialize the worker
-                self._workers = []
+                self._workers[worker_name] = []
                 for i in range(instances):
                     self._workers[worker_name].append(worker_class(**init_args))
 

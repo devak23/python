@@ -9,7 +9,7 @@ console_handler = logging.StreamHandler()
 console_handler.setLevel(logging.DEBUG)
 
 # Create a formatter and add it to the handler
-formatter = logging.Formatter('%(asctime)s - [%(levelname)s] - [%(module)s.%(funcName)s]:~  %(message)s')
+formatter = logging.Formatter('%(asctime)s - [%(levelname)s] - [Thread: %(thread)d] - [%(module)s.%(funcName)s]:~  %(message)s')
 console_handler.setFormatter(formatter)
 
 # Add the handler to the logger
@@ -21,3 +21,4 @@ logger.propoagate = False
 # Package-level logger exposed globally
 # Import modules can directly access it as `asyncronous.log`
 __all__ = ["logger"]
+

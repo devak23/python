@@ -9,7 +9,7 @@ class WikiWorkerScheduler(threading.Thread):
         if 'input_queues' in kwargs:
             kwargs.pop('input_queues')
 
-        self._entries = kwargs.pop('input_values')
+        self._entries = kwargs.pop('input_values') # read the urls that are provided in the yaml file
         super(WikiWorkerScheduler, self).__init__(**kwargs)
         self._output_queues = output_queues
         self.start()
@@ -41,13 +41,6 @@ class WikiWorker(object):
             symbol = tr.find('td').text.strip('\n')
             yield symbol
 
-
-    def get_sp_500_companies_alternate(self):
-        symbols = ['MSFT','GOOG','AAPL']
-        for i in range(len(symbols)):
-            yield symbols[i]
-
-
     def get_sp_500_companies(self):
         response = requests.get(self._url)
         if response.status_code != 200:
@@ -56,4 +49,10 @@ class WikiWorker(object):
 
         yield from self._extract_company_symbols(response.content)
 
+
+    #
+    # def get_sp_500_companies_alternate(self):
+    #     symbols = ['MSFT','GOOG','AAPL']
+    #     for i in range(len(symbols)):
+    #         yield symbols[i]
 

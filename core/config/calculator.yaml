@@ -1,0 +1,22 @@
+name: calculator
+desc: Calculates anything and everything that you want
+operations:
+  - module: operations.Addition
+    class: Addition
+    command: add
+
+  - module: operations.Subtraction
+    class: Subtraction
+    command: subtract
+
+  - module: operations.Multiplication
+    class: Multiplication
+    command: multiply
+
+  - module: operations.Square
+    class: Square
+    command: square
+
+  - module: operations.Division
+    class: Division
+    command: divide

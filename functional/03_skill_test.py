@@ -17,7 +17,7 @@ print(reverse_subtract(10, 5))
 numbers = [1, 2, 3, 4, 5]
 print(f"reversed numbers: {numbers[::-1]}")
 
-#----------------------- reversing a list---------------
+#-----------------------  x ---------------------------
 
 def reverse_args2(f: callable) -> callable:
     def wrapper(*args, **kwargs) -> callable:

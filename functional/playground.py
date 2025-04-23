@@ -111,3 +111,7 @@ if __name__ == '__main__':
     import random
 
     print(random.randint(0,100))
+
+    product_powered = lambda x,y, z: (x * y) ** z
+    print(product_powered(3,4, 3))
+    print(product_powered(5,4, 2))

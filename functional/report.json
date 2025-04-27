@@ -1,0 +1,26 @@
+{
+    "Shirt": {
+        "Price": 19.95,
+        "Color": "Red",
+        "Discounted Price": 17.95,
+        "Discount": 10
+    },
+    "Pants": {
+        "Price": 29.99,
+        "Color": "Blue",
+        "Discounted Price": 29.99,
+        "Discount": 0
+    },
+    "Shoes": {
+        "Price": 47.95,
+        "Color": null,
+        "Discounted Price": 38.36,
+        "Discount": 20
+    },
+    "Hat": {
+        "Price": 9.99,
+        "Color": "Black",
+        "Discounted Price": 9.49,
+        "Discount": 5
+    }
+}

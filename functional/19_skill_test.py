@@ -58,7 +58,6 @@ def generate_report_idiomatic(zipped_items: zip) -> dict:
 try :
     inventory1 = zip(items, prices, colors, discounts, strict=True)
     inventory2 = zip(items, prices, colors, discounts, strict=True)
-
     # [('Shirt', 20.0, 'Red', 10), ('Pants', 30.0, 'Blue', 0), ('Shoes', 50.0, None, 20), ('Hat', 10.0, 'Black', 5)]
 
     report = generate_report_traditional(inventory2)
@@ -70,7 +69,7 @@ try :
         json.dump(report, f, indent=4)
 
 except ValueError as ve:
-    print("All the items need to have the same length")
+    p("All the items need to have the same length")
 
 
 

@@ -2,11 +2,11 @@ p = lambda *anything: print(*anything)
 
 numbers = range(1, 11)
 evens = filter(lambda x: x % 2 == 0 and x > 5, numbers)  # this also returns us a generator!
-p(list(evens))
+p(f"evens = {evens}")
 
 words = ["apple", "banana", "cherry", "date", "eggplant", "fig", "grape", "watermelon", "orange"]
 five_letter_word = filter(lambda x: len(x) == 5, words)
-p(list(five_letter_word))
+p(f"five_letter_word = {five_letter_word}")
 
 # multiple conditions in filter
 books = [
@@ -41,6 +41,11 @@ filtered_books_gen = filter(lambda book:
                             has_min_rating(book, 4.0) and
                             is_alphabet_before(book, 'M'), books)
 
-p(list(filtered_books_gen))
+p("filtering 1: ", list(filtered_books_gen)) # production ready code will be found in 21_filter.py
 
-# production ready code will be found in 21_filter.py
+# another way is to chain the lambda functions like so
+with_genre = filter(lambda book: book['genre'].lower() == 'fantasy', books)
+with_rating = filter(lambda book: book['rating'] >= 4.0, with_genre)
+with_letter = filter(lambda book: book['title'][0].lower() < 'm', with_rating)
+p('filtering 2:', list(with_letter))
+

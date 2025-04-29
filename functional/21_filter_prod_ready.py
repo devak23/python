@@ -16,7 +16,7 @@ BOOKS = [
 # rating must be 4.5
 # title must come before M
 
-def _is_valid(book: Dict) -> bool:
+def is_valid(book: Dict) -> bool:
     """
     Validates if a book and its members are of the correct types
     """
@@ -45,9 +45,6 @@ def is_genre(book: Dict, genre: str) -> bool:
     """
     Checks if the given book belongs to the given genre
     """
-    if not _is_valid(book) or not genre:
-        return False
-
     return book.get('genre').strip().lower() == genre.lower()
 
 
@@ -55,8 +52,6 @@ def has_min_rating(book: Dict, min_rating: float) -> bool:
     """
     Checks if the given book has a rating greater than or equal to the given min_rating
     """
-    if not _is_valid(book) or not min_rating or min_rating < 0:
-        return False
 
     try:
         rating = float(book.get('rating', 0))
@@ -68,10 +63,6 @@ def is_alphabet_before(book: Dict, alphabet: str) -> bool:
     """
     Checks if the title of the book starts with an alphabet that comes before the given alphabet
     """
-
-    if not _is_valid(book) or not alphabet:
-        return False
-
     return book.get('title').lower() < alphabet.lower()
 
 
@@ -83,6 +74,7 @@ def filter_books(books: List[Dict], genre: str, letter: str, rating: float) -> L
         raise ValueError("Books should be a list of dictionaries")
 
     fb_gen = filter(lambda book:
+                    is_valid(book) and
                     is_genre(book, genre) and
                     has_min_rating(book, rating) and
                     is_alphabet_before(book, letter), books)

@@ -1,45 +1,47 @@
+things_i_like = ["football", "video games", "drawing", "beach playing", "tasty food", "super cars", "cartoons", "Watching Netflix & Youtube", "Birthday parties", "Going to malls", "Songs"]
+#                    0          1               2           3               4           5               6
 
-def accept_user_input():
-    num1 = int(input("Enter number1: "))
-    num2 = int(input("Enter number2: "))
-    return num1, num2
+print(len(things_i_like)) # 7
 
-def add(num1, num2):
-    return num1 + num2
 
-def multiply(num1, num2):
-    return num1 * num2
+index = 1 # plural of index = indices
+print(things_i_like[index])
+index = 2
+print(things_i_like[index])
+index = 3
+print(things_i_like[index])
 
-def subtract(num1, num2):
-    return num1 - num2
+print("=======================================")
 
-def divide(num1, num2):
-    return num1 / num2
+for i in range(len(things_i_like)):
+    print(i, things_i_like[i])
 
-def square(num1, num2):
-    return num1 * num1, num2 * num2
+print("=======================================")
 
-def maximum(num1, num2):
-    return num1 if num1 > num2 else num2
+for thing in things_i_like:
+    print(thing)
 
-def minimum(num1, num2):
-    return num1 if num1 < num2 else num2
-  
-def main():
-    num1, num2 = accept_user_input()    
-    sum = add(num1, num2)
-    product = multiply(num1, num2)
-    diff = subtract(num1, num2)
-    quotient = divide(num1, num2)
-    square1, square2 = square(num1, num2)
-    max = maximum(num1, num2)
-    min = minimum(num1, num2)
+print("============ while loop ===========")
+i = 0
+while i < 7:
+    print(i, things_i_like[i])
+    i = i + 1
 
-    print(f"sum of {num1} and {num2} = {sum}")
-    print(f"product of {num1} and {num2} = {product}")
-    print(f"subtracting {num2} from {num1} = {diff}")
-    print(f"dividing {num1} by {num2} = {quotient}")
-    print(f"square of {num1} = {square1} and square of {num2} = {square2}")
-    print(f"Max of {num1} and {num2} = {max}")
-    print(f"Min of {num1} and {num2} = {min}")
-main()
+
+primes = []
+for i in range(2,101):
+    if i == 3 or i == 5 or i == 7:
+        primes.append(i)
+        continue
+
+    indivisible: bool = False
+    for prime in primes:
+        if i % prime == 0 or i % 2 == 0:
+            break
+        else:
+            indivisible = True
+
+    if indivisible:
+        primes.append(i)
+
+print(primes)

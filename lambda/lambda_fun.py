@@ -83,3 +83,12 @@ hi = lambda first, last: print("Hi", first, last)
 do_it = lambda f, *args: f(*args)
 
 _ = list(map(do_it, [hello, bye, hi], ['Guru', 'Avinash', 'Abhay'], ['Subramanian', 'Thm', 'Kulkarni']))
+
+
+users = [{"first_name":"Helen", "age":39},
+         {"first_name":"Buck", "age":10},
+         {"first_name":"anni", "age":9}
+        ]
+
+sorted_users = sorted(users, key=lambda u: u['first_name'].lower())
+print(sorted_users)

@@ -6,7 +6,8 @@ PATTERN = r'(\d{2}):(\d{2}):(\d{2}),(\d{3})'
 
 def main(file_name: str, delay: float):
 
-    with open(file_name + '_fixed', 'w') as out_file:
+    fixed_file = file_name + '_fixed'
+    with open(fixed_file, 'w') as out_file:
         with open(file_name, "r", encoding="utf-8", newline='') as in_file:
             for line in in_file:
                 if '-->' in line:
@@ -17,6 +18,7 @@ def main(file_name: str, delay: float):
                 else:
                     out_file.write(line)
 
+    print("Fixed file: " + fixed_file)
 
 def add_delay(line: str, delay: float) -> str:
     match = re.match(PATTERN, line)
@@ -37,4 +39,4 @@ def add_delay(line: str, delay: float) -> str:
         return line
 
 if __name__ == '__main__':
-    main('../data/sample.srt', 9.5)
+    main('../data/sample.srt', -1)
